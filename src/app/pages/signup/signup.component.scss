@@ -1,0 +1,23 @@
+:root{
+    --primary-color: #677C69;
+    --text-color: #1F4040;
+    --secondary-color: #40534D;
+    --background-color: #D8BC97;
+    --main-text-color-white: #fff;
+}
+
+form{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 34px;
+
+    span{
+        font-size: 14px;
+        color: #677C69;
+        text-decoration: underline;
+        text-align: end;
+        cursor: pointer;
+    }
+}

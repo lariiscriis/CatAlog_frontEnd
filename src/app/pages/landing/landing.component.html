@@ -1,0 +1,77 @@
+<nav class="navbar">
+    <div class="container">
+
+    <div class="logo">
+        <img src="assets\svg\logo_catalog.svg" alt="">
+    </div>
+
+    <div class="itens-nav">
+    <a class="nav-item" (click)="setSection('home')">Home</a>
+    <a class="nav-item">About</a>
+    <a class="nav-item" >Features</a>
+    <a class="nav-item">Feedbacks</a>
+    </div>
+
+    <div class="botao">
+    <button routerLink="/signup">Sign Up</button>
+    </div>
+        </div>
+</nav>
+
+<section class="section-content">
+    <app-home-section *ngIf="activeSection === 'home'"></app-home-section>
+  </section>
+
+  <section class="section-explore">
+  <div class="container-explore">
+    <h1>Explore the World of Books</h1>
+      <div class="carousel">
+        <div class="carousel-track">
+          <div class="book-item" *ngFor="let book of books.concat(books); let i = index">
+            <div class="book-inner">
+            <img [src]="book.volumeInfo.imageLinks?.highRes || 'default.jpg'" 
+                 [alt]="book.volumeInfo.title" />
+           </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section class="section-about">
+     <h1>What can you do at Cat-a-log?</h1>
+      <div class="card-container">
+        <div class="cat-card">
+          <div class="card-ear left-ear"></div>
+          <div class="card-ear right-ear"></div>
+          <img src="assets/svg/organize.svg" alt="Estante" />
+              <h3>Track your reads</h3>
+               <!-- <p>Keep a history of every book you've read, from classics to cozy romances.</p> -->
+          </div>
+
+        <div class="cat-card">
+          <div class="card-ear left-ear"></div>
+          <div class="card-ear right-ear"></div>
+          <img src="assets/svg/shelf.svg" alt="Avaliação" />
+          <h4>Organize by shelf</h4>
+          <!-- <p>Create shelves like 'Favorites', 'Want to Read', and more!</p>        -->
+         </div>
+
+        <div class="cat-card">
+          <div class="card-ear left-ear"></div>
+          <div class="card-ear right-ear"></div>
+          <img src="assets/svg/pawAbout.svg" alt="Buscar" />
+            <h4>Rate and review</h4>
+          <!-- <p>Leave your thoughts on books and give them paw ratings.</p>         -->
+        </div>
+
+          <div class="cat-card">
+          <div class="card-ear left-ear"></div>
+          <div class="card-ear right-ear"></div>
+          <img src="assets/svg/search.svg"  />
+          <h4>Google Books Search</h4>
+          <!-- <p>Find and add books from Google Books directly to your catalog.</p> -->
+        </div>
+      </div>
+  </section>

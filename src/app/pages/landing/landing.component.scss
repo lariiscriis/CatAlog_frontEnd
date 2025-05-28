@@ -1,0 +1,253 @@
+:root{
+  --primary-color: #677C69;
+  --text-color: #1F4040;
+  --secondary-color: #40534D;
+  --background-color: #D8BC97;
+  --main-text-color-white: #fff;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.navbar {
+    display: flex;
+    background-color: #EDDFCC;
+
+    .container{
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      height: 4rem;
+      width: 100%; 
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+      z-index: 1;
+      
+        }
+
+    .logo{
+      width: 100%;
+      flex: 1;
+      img{
+       display: inline-block;
+       width: 150px; 
+       height: auto;
+      }
+     }
+
+    .itens-nav{
+      display: flex ;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      gap: 2em;
+      flex: 1;
+      transition: all .8s;
+
+    }
+    a{
+      background: none;
+      border: none;
+      font-weight: 400;
+      cursor: pointer;
+      color: #1F4040;
+    }
+
+    .itens-nav .nav-item{
+      position: relative;
+      padding-bottom: 3px;
+      transition: all .8s;
+  }
+
+  .itens-nav .nav-item:hover{
+    color: #677C69;
+}
+
+.itens-nav .nav-item::before{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background-color: #1F4040;
+    transition: width .8s;
+}
+
+.itens-nav  .nav-item:hover::before,
+.itens-nav  .nav-item.active::before{
+    width: 100%;
+}
+    .botao{
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+
+      button{
+        background-color: #677C69;
+        color: #fff;
+        font-size: 0.9rem;
+        border: none;
+        padding: 0.5rem 2rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all .8s;
+      }
+      button:hover{
+        background-color: #677c69a9;
+      }
+   }
+ 
+}
+  .section-content {
+    background-color: rgba(250, 242, 231, 0.767);
+    width: 100%;
+    height: calc(100vh - 4rem);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section-explore {
+    background-color: #EDDFCC;
+  }
+
+  .section-explore h1 {
+    font-size: 2rem;
+    color: #677C69;
+    text-align: center;
+    margin-bottom: 2rem;
+    margin: 1em;
+  }
+  
+  .container-explore {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .carousel {
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto 1em auto;
+    padding: 0 2rem;
+  }
+  
+  .carousel-track {
+    display: flex;
+    gap: 2rem;
+    animation: scroll 20s linear infinite;
+  }
+  
+  .book-item {
+    flex: 0 0 auto;
+    border: 5px solid #1F4040;
+    border-radius: 8px;
+    padding: 0.5em;
+    background-color: rgba(250, 242, 231, 0.767);
+  }
+
+  .book-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
+
+  }
+  
+  .book-inner:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+  }
+
+  .book-item img {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+
+.section-about {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: rgba(250, 242, 231, 0.767);
+
+  h1 {
+    font-size: 2rem;
+    color: #1F4040;
+    margin-bottom: 4rem;
+  }
+
+  .card-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+
+  }
+
+  .cat-card {
+    position: relative;
+    background: #D8BC97;
+    border-radius: 50% / 40%;
+    width: 260px;
+    padding: 2.5rem 1.2rem 3rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 50%;
+
+    &:hover {
+    transform: scale(1.05);
+    }
+
+    img {
+      width: 130px;
+      height: 130px;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #444;
+      margin: 1em;
+    }
+
+    .card-ear {
+      position: absolute;
+      top: -5px;
+      width: 50px;
+      height: 50px;
+      background: #677C69;
+      border-radius: 50% 50% 0 0;
+      z-index: -1;
+    }
+
+    .left-ear {
+      left: 20px;
+      transform: rotate(-30deg);
+    }
+
+    .right-ear {
+      right: 20px;
+      transform: rotate(30deg);
+    }
+
+  
+  }
+}

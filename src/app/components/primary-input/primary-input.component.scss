@@ -1,0 +1,53 @@
+:root{
+    --primary-color: #677C69;
+    --text-color: #1F4040;
+    --secondary-color: #40534D;
+    --background-color: #D8BC97;
+    --main-text-color-white: #fff;
+}
+
+.input-wrapper{
+    color: #677C69;
+    font-size: 16px;
+    text-align: start;
+
+    label{
+        margin-bottom: 10px;
+    }
+   
+    .input-content{
+        width: 100%;
+        border-radius: 8px;
+        display: flex;
+    }
+
+    .icon{
+        padding: 12px;
+        background-color: #677C69;
+        border-radius: 0px 8px 8px 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px; 
+        height: 50px;
+    }
+
+    img{
+        height: 20px;
+    }
+    input {
+        border: none;
+        border-radius: 8px 0 0 8px;
+        background-color: #fff;
+        color: #677C69;
+        padding: 12px 0 12px 20px;
+        width: 100%;
+    }
+
+    input:focus{
+       outline: none;
+       border: 1px solid #677C69;
+    }
+
+}
+

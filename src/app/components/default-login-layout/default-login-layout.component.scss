@@ -1,0 +1,168 @@
+:root{
+    --primary-color: #677C69;
+    --text-color: #1F4040;
+    --secondary-color: #40534D;
+    --background-color: #D8BC97;
+    --main-text-color-white: #fff;
+}
+
+main{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 100% ;
+
+}
+
+section{
+    height: 100% ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-section{
+    gap: 8px;
+    flex-grow: 1;
+    background-color: rgb(255, 249, 241, 0.49);
+
+    h2{
+        text-align: center;
+        font-size: 25px;
+        color: #40534D;
+        font-weight: 500;
+    }
+
+    img{
+        width: 650px;
+        height: 550px;
+
+    }
+}
+
+.form-section{
+    flex-grow: 0.3;
+    padding: 0 35px;
+    box-shadow: 10px 0px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(237, 223, 204, 0.77);
+    img{
+        margin-bottom: 30px;
+        width: 200px;
+    }
+
+    h2{
+        font-size: 20px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 45px;
+        color: #1A3637;
+    }
+
+    .cta-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 2em;
+        padding: 0.5rem 1rem;
+        background-color: #1F4040;
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        width: fit-content;
+        transition: background-color 0.3s ease;
+      }
+      
+      .cta-button:hover {
+        background-color: #40534D;
+        cursor: pointer;
+      }
+
+      .go-back-link{
+        gap: 0.5rem;
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+      }
+
+      svg{
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+      }
+
+}
+
+
+.btn-wrapper{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 30px;
+
+    .divider{
+        font-size: 14px;
+        color: rgba(103, 124, 105, 0.5);
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+        font-weight: 400;
+        display: flex;
+        flex-direction: row;
+
+        div{
+            flex-grow: 1;
+            height: 1px;
+            background-color: rgba(103, 124, 105, 0.5);
+        }
+    }
+
+    button{
+        width: 100%;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 500;
+        border: none;
+        background: transparent;
+        padding: 12px 24px;
+        cursor: pointer;
+
+        &:disabled{
+            opacity: 0.8 ;
+            cursor: not-allowed;
+        }
+        
+        &.btn-primary {
+            background-color: #677C69;
+            color: white;
+            box-shadow: 0px 8px 12px rgba(103, 124, 105, 0.5);
+        }
+    
+        &.btn-secondary {
+            color: #677C69;
+            border: 1px solid #677C69;
+        }
+    
+    }
+}
+
+@media (max-width: 768px) {
+.main-section{
+    display: none;
+}
+
+.form-section{
+    width: 100vw;
+}
+
+}
+
+
+
+

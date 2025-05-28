@@ -1,0 +1,119 @@
+:root{
+    --color1: #1F4040;
+    --color2: #677C69;
+    --color3: #D8BC97;
+    --color4: #40534D;
+    --color5: #1A3637;
+    --color6: rgba(255, 249, 241, 0.49);
+}
+
+
+
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 2rem;
+  gap: 2rem;
+  height: calc(100vh - 4rem);
+  width: 100vw;
+  background-color: rgba(250, 242, 231, 0.767);
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heroDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4rem 2rem;
+    gap: 6rem;
+}
+
+.hero-content {
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  color: #1F4040;
+  font-weight: bold;
+}
+
+.hero-content p {
+  font-size: 1.25rem;
+  color: #677C69;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  background-color: #1F4040;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  width: fit-content;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #40534D;
+  cursor: pointer;
+}
+
+.hero-image img {
+  max-width: 100%;
+  width: 750px;
+  height: auto;
+}
+
+.imagebackground{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  opacity: 0.08;
+  pointer-events: none;
+  transform: scale(1.2) rotate(-15deg);
+  z-index: 0;
+
+
+}
+
+.imagebackground2{
+   position: absolute;
+   top: 0;
+   right: 0;
+   opacity: 0.08;
+   pointer-events: none;
+   transform: scale(1.1) rotate(15deg);
+   z-index: 0;
+      
+}
+
+@media (max-width: 768px) {
+  .heroDiv {
+    flex-direction: column;
+    padding: 2rem 1rem;
+    height: auto;
+    text-align: center;
+  }
+
+  .imagebackground{
+    display: none;
+  }
+
+  .hero-content, .hero-image {
+    max-width: 100%;
+  }
+
+  .hero-content h1 {
+    font-size: 2.25rem;
+  }
+}

@@ -1,0 +1,225 @@
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  flex: 2;
+  padding: 20px;
+
+}
+
+.profile-header {
+  position: relative;
+  margin-bottom: 30px;
+  background-color: rgba(237, 223, 204, 0.51);
+  padding: 1em;
+  border-radius: 12px;
+  .cover-photo {
+    height: 200px;
+    background-color: #D8BC97;
+    border-radius: 10px;
+
+    img{
+      height: 100%;
+      width: 100%;
+      border-radius: 10px;
+    }
+  }
+
+  .profile-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: -50px;
+    padding: 0 20px;
+  }
+
+  .avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+
+    .cat-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('/assets/svg/fundo_aboutSection.png');
+      background-size: cover;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    .profile-avatar {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid  #EDDFCC;
+      z-index: 2;
+      top: 20px;
+      left: 10px;
+      transform:  scale(0.9);
+
+    }
+  }
+
+  .profile-actions {
+    display: flex;
+    gap: 10px;
+    align-self: flex-end;
+
+    button {
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+
+      i {
+        margin-right: 5px;
+      }
+    }
+
+    .edit-btn {
+      background-color: #677C69;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #ff6b6b;
+      color: white;
+    }
+  }
+
+  .profile-details {
+    margin-top: 20px;
+
+    h1 {
+      margin: 0;
+      color: #1F4040;
+    }
+
+    .bio {
+      color: #40534D;
+      margin: 10px 0;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      color: #677C69;
+
+      span {
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.comments-section {
+  margin-top: 40px;
+
+  h2 {
+    color: #1F4040;
+    border-bottom: 2px solid #D8BC97;
+    padding-bottom: 10px;
+  }
+
+  .comment-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 2px solid #1F4040;
+
+    .book-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 10px;
+
+      img {
+        width: 50px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+
+      h3 {
+        margin: 0;
+        font-size: 1rem;
+        color: #1F4040;
+      }
+
+      p {
+        margin: 5px 0 0;
+        font-size: 0.8rem;
+        color: #677C69;
+      }
+    }
+
+    .comment-text {
+      color: #40534D;
+      line-height: 1.5;
+    }
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+
+    .close {
+      float: right;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #1F4040;
+      }
+
+      input, textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #D8BC97;
+        border-radius: 5px;
+      }
+    }
+
+    .save-btn {
+      background: #677C69;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+}

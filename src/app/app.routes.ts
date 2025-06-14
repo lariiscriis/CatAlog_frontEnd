@@ -4,6 +4,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 import {UserComponent} from './pages/user/user.component';
 import {AuthGuard} from './services/auth-guard.service';
 import { LandingComponent } from './pages/landing/landing.component';
+import {PerfilUsuarioComponent} from './pages/perfil-usuario/perfil-usuario.component';
 
 export const routes: Routes = [
     {
@@ -23,6 +24,13 @@ export const routes: Routes = [
       path: "user",
       component: UserComponent,
       canActivate: [AuthGuard] //apenas usuarios autenticados podem acessar essa rota
+    },
+
+    {
+      path: 'perfil-usuario',
+      component: PerfilUsuarioComponent,
+      canActivate: [AuthGuard]
     }
+
 
 ];

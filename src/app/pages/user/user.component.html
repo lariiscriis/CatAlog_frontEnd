@@ -1,1 +1,60 @@
-<p>Welcome to CatALog!</p>
+<div class="dashboard-container">
+  <!-- Menu Lateral -->
+  <app-sidebar>
+
+  </app-sidebar>
+
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    <!-- Cabeçalho -->
+    <app-header [user]="user">
+
+    </app-header>
+    <!-- Carrossel Principal -->
+ <section class="featured-books">
+      <h2>Continue sua leitura</h2>
+      <div class="carousel-wrapper">
+        <div class="carousel-container">
+          <div class="carousel-track">
+            <div class="book-card" *ngFor="let book of featuredBooks">
+              <div class="book-image-container">
+                <img [src]="book.cover" [alt]="book.title">
+              </div>
+              <div class="book-info">
+                <h3>{{book.title}}</h3>
+                <p class="author">{{book.author}}</p>
+                <p class="description">{{book.description}}</p>
+                <button class="details-btn" (click)="viewDetails(book)">
+                  Saber mais <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="carousel-control prev" *ngIf="showPrevButton" (click)="prevSlide()">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="carousel-control next" *ngIf="showNextButton" (click)="nextSlide()">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="collections">
+      <div class="collection" *ngFor="let collection of collections">
+        <h3>{{collection.name}}</h3>
+        <div class="books-grid">
+          <div class="book-item" *ngFor="let book of collection.books">
+            <img [src]="book.cover" [alt]="book.title">
+            <div class="book-meta">
+              <span class="title">{{book.title }}</span>
+              <span class="author">{{book.author }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

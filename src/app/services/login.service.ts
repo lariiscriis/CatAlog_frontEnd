@@ -3,12 +3,25 @@ import { Injectable } from '@angular/core';
 import { LoginResponse } from '../types/login-response.type';
 import { __values } from 'tslib';
 import { tap } from 'rxjs';
+import { Observable } from 'rxjs';
+
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  photo?: string;
+  bio: String;
+}
+
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class LoginService {
 apiUrl = "http://localhost:8080/auth"
+
   constructor(private httClient: HttpClient) { }
 
   login(email: String, password: String){
@@ -26,4 +39,5 @@ apiUrl = "http://localhost:8080/auth"
 
     }))
   }
+
 }

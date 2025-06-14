@@ -36,12 +36,12 @@ export class LoginComponent {
   submit(){
     this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
       next: () =>{
-      this.toastrService.success("Login successful!");
+      this.toastrService.success("Login realizado com sucesso!");
         setTimeout(() => {
           this.router.navigate(["user"]);
         }, 1000);
         },
-      error: () => this.toastrService.error("Login failed. Please try again")
+      error: () => this.toastrService.error("Falha no login. Verifique seus dados e tente novamente.")
     })
 
   }

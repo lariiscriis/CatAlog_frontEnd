@@ -41,12 +41,12 @@ export class SignupComponent {
   submit(){
     this.loginService.signup(this.signupForm.value.name, this.signupForm.value.email, this.signupForm.value.password).subscribe({
       next: () =>{
-        this.toastrService.success("Account created successfully! Please log in.");
+        this.toastrService.success("Conta criada com sucesso! Faça login para continuar.");
         setTimeout(() => {
           this.router.navigate(["login"]);
         }, 1000);
       },
-      error: () => this.toastrService.error("Registration failed. Please try again later.")
+      error: () => this.toastrService.error("Não foi possível concluir o cadastro. Tente novamente mais tarde.")
     })
 
   }

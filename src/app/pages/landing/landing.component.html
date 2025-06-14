@@ -6,14 +6,14 @@
     </div>
 
     <div class="itens-nav">
-    <a class="nav-item" (click)="setSection('home')">Home</a>
-    <a class="nav-item">About</a>
-    <a class="nav-item" >Features</a>
-    <a class="nav-item">Feedbacks</a>
+    <a class="nav-item" (click)="setSection('home')">Início</a>
+    <a class="nav-item"  (click)="scrollTo('section-about')">Sobre Nós</a>
+    <a class="nav-item"  (click)="scrollTo('section-features')">Funcionalidades</a>
+    <a class="nav-item"  (click)="scrollTo('feedback-section')">Depoimentos</a>
     </div>
 
     <div class="botao">
-    <button routerLink="/signup">Sign Up</button>
+    <button routerLink="/signup">Cadastre-se</button>
     </div>
         </div>
 </nav>
@@ -22,9 +22,12 @@
     <app-home-section *ngIf="activeSection === 'home'"></app-home-section>
   </section>
 
-  <section class="section-explore">
+  <div class="section-divider primary">
+
+</div>
+  <section class="section-explore" id="section-explore">
   <div class="container-explore">
-    <h1>Explore the World of Books</h1>
+    <h1>Descubra um Universo Literário</h1>
       <div class="carousel">
         <div class="carousel-track">
           <div class="book-item" *ngFor="let book of books.concat(books); let i = index">
@@ -33,45 +36,204 @@
                  [alt]="book.volumeInfo.title" />
            </div>
           </div>
+          
         </div>
+
+
+        
       </div>
     </div>
   </section>
 
+<div class="section-divider secondary"></div>
 
-  <section class="section-about">
-     <h1>What can you do at Cat-a-log?</h1>
-      <div class="card-container">
-        <div class="cat-card">
-          <div class="card-ear left-ear"></div>
-          <div class="card-ear right-ear"></div>
-          <img src="assets/svg/organize.svg" alt="Estante" />
-              <h3>Track your reads</h3>
-               <!-- <p>Keep a history of every book you've read, from classics to cozy romances.</p> -->
-          </div>
+<section class="section-about" id="section-about">
+  <h1>O que você pode fazer no Cat-a-log?</h1>
+  <div class="card-container">
 
-        <div class="cat-card">
-          <div class="card-ear left-ear"></div>
-          <div class="card-ear right-ear"></div>
-          <img src="assets/svg/shelf.svg" alt="Avaliação" />
-          <h4>Organize by shelf</h4>
-          <!-- <p>Create shelves like 'Favorites', 'Want to Read', and more!</p>        -->
-         </div>
-
-        <div class="cat-card">
-          <div class="card-ear left-ear"></div>
-          <div class="card-ear right-ear"></div>
-          <img src="assets/svg/pawAbout.svg" alt="Buscar" />
-            <h4>Rate and review</h4>
-          <!-- <p>Leave your thoughts on books and give them paw ratings.</p>         -->
-        </div>
-
-          <div class="cat-card">
-          <div class="card-ear left-ear"></div>
-          <div class="card-ear right-ear"></div>
-          <img src="assets/svg/search.svg"  />
-          <h4>Google Books Search</h4>
-          <!-- <p>Find and add books from Google Books directly to your catalog.</p> -->
+    <div class="card-wrapper">
+      <div class="about-card" style="background-image: url('assets/svg/fundo_aboutSection.png')">
+        <div class="card-content">
+          <img src="assets/svg/organize.svg" alt="Track reads" class="card-icon" />
         </div>
       </div>
-  </section>
+      <h3>Rastreie suas leituras</h3>
+    </div>
+
+    <div class="card-wrapper">
+      <div class="about-card" style="background-image: url('assets/svg/fundo_aboutSection.png')">
+        <div class="card-content">
+          <img src="assets/svg/shelf.svg" alt="Organize" class="card-icon" />
+        </div>
+      </div>
+      <h3>Organize por estantes</h3>
+    </div>
+
+    <div class="card-wrapper">
+      <div class="about-card" style="background-image: url('assets/svg/fundo_aboutSection.png')">
+        <div class="card-content">
+          <img src="assets/svg/pawAbout.svg" alt="Rate" class="card-icon" />
+        </div>
+      </div>
+      <h3>Avalie e comente</h3>
+    </div>
+
+    <div class="card-wrapper">
+      <div class="about-card" style="background-image: url('assets/svg/fundo_aboutSection.png')">
+        <div class="card-content">
+          <img src="assets/svg/search.svg" alt="Search" class="card-icon" />
+        </div>
+      </div>
+      <h3>Busca no Google Books</h3>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider secondary"></div>
+
+<section class="section-features" id="section-features">
+  <div class="features-container">
+    <div class="features-content">
+      <h2>Descubra as Funcionalidades do Cat-a-log</h2>
+      <p>Veja como organizar sua coleção de livros ficou tão fácil quanto um cochilo de gato! 
+   Nossa plataforma oferece ferramentas intuitivas para catalogar, avaliar e descobrir novos livros.<.</p>
+    
+    </div>
+    
+    <div class="video-container">
+      
+      <img src="assets/svg/paw.svg" alt="Patinha decorativa" class="paw-decoration top-left-paw">
+      
+      <video controls class="demo-video">
+        <source src="assets/videos/product_demo.mp4" type="video/mp4">
+      </video>
+      
+      <img src="assets/svg/paw.svg" alt="Patinha decorativa" class="paw-decoration bottom-right-paw">
+    </div>
+  </div>
+</section>
+
+<div class="section-divider primary"></div>
+
+<section class="feedback-section" id="feedback-section">
+  
+  <h2>O que nossos usuários dizem...</h2>
+  
+  <div class="feedback-carousel">
+    <button class="nav-arrow prev" (click)="prevFeedback()">‹</button>
+    
+    <div class="feedback-cards-container">
+      <div class="feedback-card" *ngFor="let feedback of feedbacks; let i = index" 
+           [class.active]="i === currentFeedbackIndex">
+        
+        <div class="author-image-container">
+          <div class="cat-face-bg" style="background-image: url('assets/svg/fundo_aboutSection.png')"></div>
+          <img src="https://marketplace.canva.com/A5alg/MAESXCA5alg/1/tl/canva-user-icon-MAESXCA5alg.png" [alt]="feedback.author" class="author-image">
+        </div>
+        
+        
+        <div class="feedback-content">
+          <h3 class="author-name">{{feedback.author}}</h3>
+          <p class="author-role">{{feedback.role}}</p>
+          <p class="comment">"{{feedback.comment}}"</p>
+          <div class="rating">
+            <span *ngFor="let star of [1,2,3,4,5]">
+              {{ star <= feedback.rating ? '★' : '☆' }}
+            </span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    
+    <button class="nav-arrow next" (click)="nextFeedback()">›</button>
+  </div>
+  
+  <div class="carousel-indicators">
+    <button *ngFor="let feedback of feedbacks; let i = index" 
+            [class.active]="i === currentFeedbackIndex"
+            (click)="goToFeedback(i)">
+    </button>
+  </div>
+</section>
+
+<div class="section-divider primary"></div>
+<section class="contact-section" id="contact-section">
+  
+  <div class="contact-container">
+    <div class="contact-info">
+      <h2>Fale Conosco</h2>
+      <div class="contact-paw">
+        <img src="assets/svg/imagem_gato.svg" alt="Patinha" class="paw-icon">
+      </div>
+      <p>Tem dúvidas ou sugestões? Envie uma mensagem e responderemos em breve!</p>
+      <div class="contact-method">
+        <div class="contacts">
+        <i class="bi bi-envelope-at-fill"></i>
+        <span>contate: cat-a-log.com</span>
+        </div>
+
+        <div class="contacts">
+         <i class="bi bi-telephone-fill"></i>
+        <span>+1 (123) 456-7890</span>
+      </div>
+      </div>
+      </div>
+    
+    <form class="contact-form">
+      <div class="form-group">
+        <label for="name">Seu Email</label>
+        <div class="input-with-cat">
+          <input type="text" id="name" placeholder="Digite seu nome...">
+          <span class="cat-nose"><i class="bi bi-person-circle"></i></span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Seu Email</label>
+        <div class="input-with-cat">
+          <input type="email" id="email" placeholder="miau@example.com">
+          <span class="cat-nose"><i class="bi bi-envelope-fill"></i></span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="message">Sua Mensagem</label>
+        <textarea id="message" placeholder="O que você gostaria de nos dizer?"></textarea>
+        <div class="text-counter">0/200 </div>
+      </div>
+      
+      <button type="submit" class="submit-btn">
+        Enviar Mensagem
+      </button>
+    </form>
+  </div>
+</section>
+
+<footer class="cat-footer">
+  <div class="container">
+    <div class="logo">
+      <img src="assets/svg/logo_catalog.svg" alt="Cat-a-log">
+    </div>
+
+    <div class="footer-links">
+      <a class="footer-item" (click)="setSection('home')">Início</a>
+      <a class="footer-item" (click)="scrollTo('section-about')">Sobre</a>
+      <a class="footer-item" (click)="scrollTo('section-features')">Funcionalidades</a>
+      <a class="footer-item" (click)="scrollTo('feedback-section')">Depoimentos</a>
+      <a class="footer-item" (click)="scrollTo('contact-section')">Contato</a>
+    </div>
+
+    <div class="social-paws">
+      <span>Siga-nos:</span>
+      <a href="#" class="social-link"><i class="bi bi-instagram"></i></a>
+      <a href="#" class="social-link"><i class="bi bi-twitter"></i></a>
+      <a href="#" class="social-link"><i class="bi bi-tiktok"></i></a>
+    </div>
+  </div>
+  
+  <div class="copyright">
+    © 2023 Cat-a-log.  Todos os direitos reservados.
+  </div>
+</footer>

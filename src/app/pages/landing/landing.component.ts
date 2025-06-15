@@ -45,26 +45,21 @@ export class LandingComponent implements OnInit{
   ];
 
   constructor(private bookService: BookService){}
+
   ngOnInit(): void {
-    const sub = this.bookService.searchBooks('fantasy romance popular tiktok').subscribe((data: any) => {
-      this.books = data.items
-      .filter((book: any) => {
-        const imageLink = book.volumeInfo.imageLinks?.thumbnail;
-        return imageLink && !imageLink.includes("image not available");
-      })
-      .map((book: any)=>{
-        const imageLink = book.volumeInfo.imageLinks?.thumbnail;
-        if(imageLink){
-          const highResImage = imageLink
-          book.volumeInfo.imageLinks.highRes = highResImage;
-        }
-        return book;
-      })
-    })
+    this.bookService.getBooksFromDatabase().subscribe((data: any[]) => {
+      this.books = data
+        .filter(book => book.volumeInfo.imageLinks?.thumbnail)
+        .map(book => {
+          const imageLink = book.volumeInfo.imageLinks.thumbnail;
+          book.volumeInfo.imageLinks.highRes = imageLink;
+          return book;
+        });
+    });
   }
-  
+
   setSection(section : string){
-    this.activeSection = section; 
+    this.activeSection = section;
   }
 
     scrollTo(sectionId: string) {

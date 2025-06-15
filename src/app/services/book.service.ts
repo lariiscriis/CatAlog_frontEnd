@@ -29,5 +29,9 @@ export class BookService {
     return this.http.get(`${this.apiUrl}/search?query=${query}&langRestrict=en`);
   }
 
+  getBooksFromDatabase(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}`);
+  }
+
 
 }

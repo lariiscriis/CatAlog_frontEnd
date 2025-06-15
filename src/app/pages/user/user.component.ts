@@ -83,7 +83,7 @@ export class UserComponent implements OnInit{
           description: 'A história da dinastia Targaryen em Westeros, expandindo a conquista dos Sete Reinos pela Casa Targaryen.'
         },
        {
-              id: 2,
+          id: 2,
           title: 'O Senhor dos Anéis: A Sociedade do Anel',
           author: 'J.R.R. Tolkien',
           cover: 'https://m.media-amazon.com/images/I/81hCVEC0ExL.jpg',
@@ -102,7 +102,7 @@ export class UserComponent implements OnInit{
     },
 
     {
-      name: 'Novas aquisições',
+      name: 'Novas aquisições da Biblioteca',
       books: [          {
           id: 1,
           title: 'Fogo & Sangue',
@@ -111,7 +111,7 @@ export class UserComponent implements OnInit{
           description: 'A história da dinastia Targaryen em Westeros, expandindo a conquista dos Sete Reinos pela Casa Targaryen.'
         },
        {
-              id: 2,
+          id: 2,
           title: 'O Senhor dos Anéis: A Sociedade do Anel',
           author: 'J.R.R. Tolkien',
           cover: 'https://m.media-amazon.com/images/I/81hCVEC0ExL.jpg',

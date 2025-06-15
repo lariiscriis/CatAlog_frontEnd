@@ -5,14 +5,14 @@
 }
 
 .profile-container {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   flex: 2;
   padding: 20px;
-
 }
 
 .profile-header {
+  max-width: 800px;
   position: relative;
   margin-bottom: 30px;
   background-color: rgba(237, 223, 204, 0.51);
@@ -123,6 +123,7 @@
 
 .comments-section {
   margin-top: 40px;
+  max-width: 800px;
 
   h2 {
     color: #1F4040;
@@ -177,7 +178,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.5);
+  background: rgba(103, 124, 105, 0.37);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -189,6 +190,7 @@
     border-radius: 10px;
     width: 90%;
     max-width: 500px;
+    border: 5px solid #677C69;
 
     .close {
       float: right;
@@ -208,11 +210,17 @@
       input, textarea {
         width: 100%;
         padding: 8px;
-        border: 1px solid #D8BC97;
+        border: 1px solid #40534D;
         border-radius: 5px;
+        resize: none;
+      }
+
+      .imagem-input{
+        border: 1px solid #40534D;
+        background-color: rgba(103, 124, 105, 0.56);
+        color: white;
       }
     }
-
     .save-btn {
       background: #677C69;
       color: white;

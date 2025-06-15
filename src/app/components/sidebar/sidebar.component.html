@@ -7,17 +7,20 @@
     <a class="menu-item active" routerLink="/user" routerLinkActive="active">
       <i class="bi bi-house"></i> Início
     </a>
-    <a class="menu-item" (click)="setActiveTab('listadeDesejos')">
-      <i class="bi bi-bookmark"></i> Desejados
-    </a>
-    <a class="menu-item" (click)="setActiveTab('emprestados')">
-      <i class="bi bi-arrow-down-circle"></i> Emprestados
-    </a>
-    <a class="menu-item" (click)="setActiveTab('favoritos')">
-      <i class="bi bi-heart"></i> Favoritos
-    </a>
     <a class="menu-item" routerLink="/perfil-usuario" routerLinkActive="active">
       <i class="bi bi-person-circle"></i> Meu Perfil
+    </a>
+    <a class="menu-item"  routerLink="/favoritos" routerLinkActive="active" >
+      <i class="bi bi-heart"></i> Favoritos
+    </a>
+    <a class="menu-item"  routerLink="/emprestados" routerLinkActive="active">
+      <i class="bi bi-arrow-down-circle"></i> Emprestados
+    </a>
+    <a class="menu-item"  routerLink="/desejados" routerLinkActive="active">
+      <i class="bi bi-bookmark"></i> Desejados
+    </a>
+    <a class="menu-item"  routerLink="/historico-emprestimo" routerLinkActive="active">
+      <i class="bi bi-book"></i> Histórico
     </a>
   </nav>
 </div>

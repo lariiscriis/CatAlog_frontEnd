@@ -9,8 +9,8 @@
       <i class="bi bi-bell"></i>
     </button>
     <div class="user-profile">
-      <img [src]="user?.photo || 'assets/images/default-user.jpg'" alt="Perfil">
-      <span>{{user?.name}}</span>
+      <img [src]="(usuario$ | async)?.foto_perfil || 'https://marketplace.canva.com/A5alg/MAESXCA5alg/1/tl/canva-user-icon-MAESXCA5alg.png'" alt="Perfil">
+      <span>{{ (usuario$ | async)?.name }}</span>
     </div>
     <button class="logout-btn" (click)="logout()">
       <i class="bi bi-box-arrow-right"></i>

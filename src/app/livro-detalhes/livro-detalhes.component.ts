@@ -138,7 +138,7 @@ export class LivroDetalhesComponent implements OnInit {
   }
 
   solicitarEmprestimo(): void {
-    const token = sessionStorage.getItem('auth-token');
+    const token = localStorage.getItem('auth-token');
     console.log('Token no sessionStorage:', token);
 
     if (!token) {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
+import {  catchError, throwError } from 'rxjs';
 
 
 interface  Usuario{
@@ -9,8 +10,8 @@ interface  Usuario{
   email: string;
   password: string;
   bio: string;
-  foto_perfil: string;
-  foto_background: string;
+  fotoPerfil: string;
+  fotoBackground: string;
 }
 
 @Injectable({
@@ -55,7 +56,18 @@ export class UsuarioService {
       })
     );
   }
-
+  buscarPorId(id: string): Observable<Usuario> {
+    const url = `${this.apiUrl}/${id}`;
+    return this.http.get<Usuario>(url, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap(u => console.log('fetch usuario id', id, u)),
+      catchError(err => {
+        console.error('Erro ao buscar usuário', err);
+        return throwError(() => err);
+      })
+    );
+  }
 
   getUsuarioAtual(): Usuario | null {
     return this.usuarioSubject.getValue();
@@ -83,7 +95,8 @@ updateUsuario(email: string, dados: any, fotoPerfil?: File, fotoBackground?: Fil
     });
   }
   //chamar quando for fazer logout pra limpar os dados
-  clearUsuario(){
-    this.usuarioSubject.next(null);
-  }
+    clearUsuario() {
+      this.usuarioSubject.next(null);
+      localStorage.removeItem('auth-token');
+    }
 }

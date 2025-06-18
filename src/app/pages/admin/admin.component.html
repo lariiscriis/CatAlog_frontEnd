@@ -1,2 +1,146 @@
+<div class="admin-container">
+  <div class="tabs">
+    <button [class.active]="activeTab === 'livros'" (click)="activeTab = 'livros'">Gerenciar Livros</button>
+    <button [class.active]="activeTab === 'emprestimos'" (click)="activeTab = 'emprestimos'">Gerenciar Empréstimos</button>
 
-<h1>Funciona Admin</h1>
+    <button class="logout-btn" (click)="logout()">
+      <i class="bi bi-box-arrow-right"></i>
+    </button>
+  </div>
+
+  <div *ngIf="activeTab === 'livros'" class="tab-content">
+    <div class="add-book">
+      <h2>Adicionar Livro</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Título</label>
+          <input [(ngModel)]="novoLivro.titulo" placeholder="Título do livro">
+        </div>
+        <div class="form-group">
+          <label>Autores</label>
+          <input [(ngModel)]="novoLivro.autores" placeholder="Autores (separados por vírgula)">
+        </div>
+        <div class="form-group">
+          <label>Editora</label>
+          <input [(ngModel)]="novoLivro.editora" placeholder="Editora">
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea [(ngModel)]="novoLivro.descricao" placeholder="Descrição do livro"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Categoria</label>
+          <input [(ngModel)]="novoLivro.categoria" placeholder="Categoria">
+        </div>
+        <div class="form-group">
+          <label>Capa (URL)</label>
+          <input [(ngModel)]="novoLivro.capa" placeholder="URL da imagem da capa">
+        </div>
+        <div class="form-group">
+          <label>Data de Publicação</label>
+          <input type="text" [(ngModel)]="novoLivro.data_publicacao">
+        </div>
+        <div class="form-group">
+          <label>Número de Páginas</label>
+          <input type="number" [(ngModel)]="novoLivro.numeroPaginas" placeholder="Número de páginas">
+        </div>
+        <div class="form-group">
+          <label>Quantidade</label>
+          <input type="number" [(ngModel)]="novoLivro.qtde_livros" placeholder="Quantidade disponível">
+        </div>
+        <div class="form-group">
+          <label>Disponibilidade</label>
+          <select [(ngModel)]="novoLivro.disponibilidade">
+            <option value="true">Disponível</option>
+            <option value="false">Indisponível</option>
+          </select>
+        </div>
+        <button class="save-btn" (click)="adicionarLivro()">Salvar Livro</button>
+      </div>
+    </div>
+
+    <h3>Lista de Livros</h3>
+    <div class="search-bar">
+      <input type="text" [(ngModel)]="termoBusca" placeholder="Buscar por título ou autor" (input)="buscarLivros()">
+    </div>
+
+    <div *ngFor="let livro of livros" class="livro-item">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Título</label>
+          <input [(ngModel)]="livro.titulo">
+        </div>
+        <div class="form-group">
+          <label>Autores</label>
+          <input [(ngModel)]="livro.autores">
+        </div>
+        <div class="form-group">
+          <label>Editora</label>
+          <input [(ngModel)]="livro.editora">
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea [(ngModel)]="livro.descricao"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Categoria</label>
+          <input [(ngModel)]="livro.categoria">
+        </div>
+        <div class="form-group">
+          <label>Capa (URL)</label>
+          <input [(ngModel)]="livro.capa">
+        </div>
+        <div class="form-group">
+          <label>Data Publicação</label>
+          <input type="text" [(ngModel)]="livro.data_publicacao">
+        </div>
+        <div class="form-group">
+          <label>Páginas</label>
+          <input type="number" [(ngModel)]="livro.numeroPaginas">
+        </div>
+        <div class="form-group">
+          <label>Quantidade</label>
+          <input type="number" [(ngModel)]="livro.qtde_livros">
+        </div>
+        <div class="form-group">
+          <label>Disponível</label>
+          <select [(ngModel)]="livro.disponibilidade">
+            <option [value]="true">Sim</option>
+            <option [value]="false">Não</option>
+          </select>
+        </div>
+        <div class="actions">
+          <button class="edit-btn" (click)="editarLivro(livro)">Salvar Edição</button>
+          <button class="delete-btn" (click)="deletarLivro(livro.id_livro)">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="activeTab === 'emprestimos'" class="tab-content">
+    <h3>Gerenciar Empréstimos</h3>
+    <div class="filtros">
+      <button [class.active]="filtroAtivo === 'todos'" (click)="carregarTodosEmprestimos()">Todos</button>
+      <button [class.active]="filtroAtivo === 'atrasados'" (click)="carregarEmprestimosAtrasados()">Atrasados</button>
+    </div>
+
+    <div class="emprestimos-lista">
+      <div *ngFor="let emp of emprestimos" class="emprestimo-item" [class.atrasado]="estaAtrasado(emp.dataPrevistaDevolucao)">
+        <div class="livro-info">
+          <img [src]="emp.livro?.capa || 'assets/default-book.png'" alt="Capa do livro" class="book-cover">
+          <div>
+            <h4>{{ emp.livro?.titulo || 'Livro desconhecido' }}</h4>
+          </div>
+        </div>
+        <div class="detalhes-emprestimo">
+<!--          <p><strong>Usuário:</strong> {{ emp.usuario?.name || 'N/A' }}</p>-->
+<!--          <p><strong>Email:</strong> {{ emp.usuario?.email || 'N/A' }}</p>-->
+          <p><strong>Data Empréstimo:</strong> {{ emp.dataEmprestimo | date:'dd/MM/yyyy' }}</p>
+          <p><strong>Devolução Prevista:</strong> {{ emp.dataPrevistaDevolucao | date:'dd/MM/yyyy' }}</p>
+          <p *ngIf="emp.dataDevolucao"><strong>Devolvido em:</strong> {{ emp.dataDevolucao | date:'dd/MM/yyyy' }}</p>
+          <p><strong>Status:</strong> {{ emp.estado }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

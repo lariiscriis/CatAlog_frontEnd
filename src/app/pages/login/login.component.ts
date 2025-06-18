@@ -34,13 +34,21 @@ export class LoginComponent {
   }
 
   submit(){
-    this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
+    const email = this.loginForm.value.email;
+    const password = this.loginForm.value.password;
+
+    this.loginService.login(email, password).subscribe({
       next: () =>{
       this.toastrService.success("Login realizado com sucesso!");
-        setTimeout(() => {
-          this.router.navigate(["user"]);
+      localStorage.setItem("email", this.loginForm.value.email);
+    setTimeout(() => {
+          if (this.loginForm.value.email === 'admin@gmail.com') {
+            this.router.navigate(['admin']);
+          } else {
+            this.router.navigate(['user']);
+          }
         }, 1000);
-        },
+      },
       error: () => this.toastrService.error("Falha no login. Verifique seus dados e tente novamente.")
     })
 

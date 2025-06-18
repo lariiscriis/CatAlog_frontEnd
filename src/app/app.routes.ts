@@ -10,6 +10,7 @@ import {EmprestadosComponent} from './emprestados/emprestados.component';
 import {DesejadosComponent} from './desejados/desejados.component';
 import {HistoricoemprestimoComponent} from './historicoemprestimo/historicoemprestimo.component';
 import {LivroDetalhesComponent} from './livro-detalhes/livro-detalhes.component';
+import {AdminComponent} from './pages/admin/admin.component';
 
 export const routes: Routes = [
     {
@@ -63,6 +64,11 @@ export const routes: Routes = [
     path: 'livro/:id',
     component: LivroDetalhesComponent,
     canActivate: [AuthGuard]
+  },
+
+  {
+    path: 'admin',
+    component: AdminComponent,
   }
 
 

@@ -49,11 +49,12 @@ export class LandingComponent implements OnInit{
   ngOnInit(): void {
     this.bookService.getBooksFromDatabase().subscribe((data: any[]) => {
       this.books = data
-        .filter(book => book.volumeInfo.imageLinks?.thumbnail)
+        .filter(book => !!book.capa && book.capa.trim() !== "")
         .map(book => {
-          const imageLink = book.volumeInfo.imageLinks.thumbnail;
-          book.volumeInfo.imageLinks.highRes = imageLink;
-          return book;
+            return {
+              ...book,
+              highRes: book.capa
+            }
         });
     });
   }

@@ -9,6 +9,7 @@ import {FavoritosComponent} from './favoritos/favoritos.component';
 import {EmprestadosComponent} from './emprestados/emprestados.component';
 import {DesejadosComponent} from './desejados/desejados.component';
 import {HistoricoemprestimoComponent} from './historicoemprestimo/historicoemprestimo.component';
+import {LivroDetalhesComponent} from './livro-detalhes/livro-detalhes.component';
 
 export const routes: Routes = [
     {
@@ -57,6 +58,12 @@ export const routes: Routes = [
     component: HistoricoemprestimoComponent,
     canActivate: [AuthGuard]
   },
+
+  {
+    path: 'livro/:id',
+    component: LivroDetalhesComponent,
+    canActivate: [AuthGuard]
+  }
 
 
 ];

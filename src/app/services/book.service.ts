@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import {Livro} from '../types/livro.type';
 
 export interface Book {
   id: number;
@@ -26,12 +27,19 @@ export class BookService {
   constructor(private http: HttpClient) { }
 
   searchBooks(query: String){
-    return this.http.get(`${this.apiUrl}/search?query=${query}&langRestrict=en`);
+    return this.http.get<Livro>(`${this.apiUrl}/search?query=${query}&langRestrict=en`);
   }
 
-  getBooksFromDatabase(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}`);
+  getBooksFromDatabase(): Observable<Livro[]> {
+
+    return this.http.get<Livro[]>(`${this.apiUrl}`);
+  }
+  getBooksByCategory(category: string): Observable<Livro[]> {
+    return this.http.get<Livro[]>(`${this.apiUrl}?category=${category}`);
   }
 
+  buscarPorId(id: string): Observable<Livro> {
+    return this.http.get<Livro>(`${this.apiUrl}/${id}`);
+  }
 
 }

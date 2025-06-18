@@ -32,15 +32,15 @@
         <div class="carousel-track">
           <div class="book-item" *ngFor="let book of books.concat(books); let i = index">
             <div class="book-inner">
-            <img [src]="book.volumeInfo.imageLinks?.highRes || 'default.jpg'" 
-                 [alt]="book.volumeInfo.title" />
+            <img [src]="book.capa || 'default.jpg'"
+                 [alt]="book.titulo" />
            </div>
           </div>
-          
+
         </div>
 
 
-        
+
       </div>
     </div>
   </section>
@@ -84,7 +84,7 @@
           <img src="assets/svg/search.svg" alt="Search" class="card-icon" />
         </div>
       </div>
-      <h3>Busca no Google Books</h3>
+      <h3>Acervo Infinito</h3>
     </div>
 
   </div>
@@ -96,19 +96,19 @@
   <div class="features-container">
     <div class="features-content">
       <h2>Descubra as Funcionalidades do Cat-a-log</h2>
-      <p>Veja como organizar sua coleção de livros ficou tão fácil quanto um cochilo de gato! 
+      <p>Veja como organizar sua coleção de livros ficou tão fácil quanto um cochilo de gato!
    Nossa plataforma oferece ferramentas intuitivas para catalogar, avaliar e descobrir novos livros.<.</p>
-    
+
     </div>
-    
+
     <div class="video-container">
-      
+
       <img src="assets/svg/paw.svg" alt="Patinha decorativa" class="paw-decoration top-left-paw">
-      
+
       <video controls class="demo-video">
         <source src="assets/videos/product_demo.mp4" type="video/mp4">
       </video>
-      
+
       <img src="assets/svg/paw.svg" alt="Patinha decorativa" class="paw-decoration bottom-right-paw">
     </div>
   </div>
@@ -117,22 +117,22 @@
 <div class="section-divider primary"></div>
 
 <section class="feedback-section" id="feedback-section">
-  
+
   <h2>O que nossos usuários dizem...</h2>
-  
+
   <div class="feedback-carousel">
     <button class="nav-arrow prev" (click)="prevFeedback()">‹</button>
-    
+
     <div class="feedback-cards-container">
-      <div class="feedback-card" *ngFor="let feedback of feedbacks; let i = index" 
+      <div class="feedback-card" *ngFor="let feedback of feedbacks; let i = index"
            [class.active]="i === currentFeedbackIndex">
-        
+
         <div class="author-image-container">
           <div class="cat-face-bg" style="background-image: url('assets/svg/fundo_aboutSection.png')"></div>
           <img src="https://marketplace.canva.com/A5alg/MAESXCA5alg/1/tl/canva-user-icon-MAESXCA5alg.png" [alt]="feedback.author" class="author-image">
         </div>
-        
-        
+
+
         <div class="feedback-content">
           <h3 class="author-name">{{feedback.author}}</h3>
           <p class="author-role">{{feedback.role}}</p>
@@ -146,12 +146,12 @@
         </div>
       </div>
     </div>
-    
+
     <button class="nav-arrow next" (click)="nextFeedback()">›</button>
   </div>
-  
+
   <div class="carousel-indicators">
-    <button *ngFor="let feedback of feedbacks; let i = index" 
+    <button *ngFor="let feedback of feedbacks; let i = index"
             [class.active]="i === currentFeedbackIndex"
             (click)="goToFeedback(i)">
     </button>
@@ -160,7 +160,7 @@
 
 <div class="section-divider primary"></div>
 <section class="contact-section" id="contact-section">
-  
+
   <div class="contact-container">
     <div class="contact-info">
       <h2>Fale Conosco</h2>
@@ -180,7 +180,7 @@
       </div>
       </div>
       </div>
-    
+
     <form class="contact-form">
       <div class="form-group">
         <label for="name">Seu Email</label>
@@ -189,7 +189,7 @@
           <span class="cat-nose"><i class="bi bi-person-circle"></i></span>
         </div>
       </div>
-      
+
       <div class="form-group">
         <label for="email">Seu Email</label>
         <div class="input-with-cat">
@@ -197,13 +197,13 @@
           <span class="cat-nose"><i class="bi bi-envelope-fill"></i></span>
         </div>
       </div>
-      
+
       <div class="form-group">
         <label for="message">Sua Mensagem</label>
         <textarea id="message" placeholder="O que você gostaria de nos dizer?"></textarea>
         <div class="text-counter">0/200 </div>
       </div>
-      
+
       <button type="submit" class="submit-btn">
         Enviar Mensagem
       </button>
@@ -232,7 +232,7 @@
       <a href="#" class="social-link"><i class="bi bi-tiktok"></i></a>
     </div>
   </div>
-  
+
   <div class="copyright">
     © 2023 Cat-a-log.  Todos os direitos reservados.
   </div>

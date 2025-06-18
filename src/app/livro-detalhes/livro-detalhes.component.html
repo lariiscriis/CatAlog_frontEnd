@@ -1,0 +1,154 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="main-content">
+    <app-header></app-header>
+    <div class="livro-container">
+      <div class="capa-container">
+        <img [src]="livro.capa" [alt]="livro.titulo" class="capa-livro">
+        <div class="badge" *ngIf="livro.status === 'emprestado'">
+          Devolução: {{ diasRestantes }} dias
+        </div>
+
+      </div>
+
+      <div class="info-container">
+
+        <div class="author-actions-buttons">
+          <h1>{{ livro.titulo }}</h1>
+
+          <div class="book-actions">
+            <button class="action-btn favorite-btn">
+              <i class="bi bi-heart"></i>
+            </button>
+            <button class="action-btn wishlist-btn" >
+              <i class="bi bi-bookmark"></i>
+            </button>
+          </div>
+        </div>
+        <h2>{{ livro.autores }}</h2>
+        <p class="publicacao">{{ livro.editora }} • {{ livro.data_publicacao | date }}</p>
+
+
+        <div class="detalhes">
+          <p><strong>Páginas:</strong> {{ livro.numeroPaginas }}</p>
+          <p><strong>Categoria:</strong> {{ livro.categoria }}</p>
+        </div>
+
+        <p class="descricao">{{ livro.descricao }}</p>
+
+        <!-- Seção para Favoritos -->
+        <div *ngIf="livro.status === 'favorito' && livro.notas" class="comments-section">
+
+          <!-- Avaliação com gatinhos -->
+          <div class="rating-display" *ngIf="livro.avaliacao">
+            <h3 style="color: #1F4040">Sua Avaliação:</h3>
+            <div class="cat-rating-display">
+              <span *ngFor="let star of [1,2,3,4,5]">
+                <img [src]="star <= livro.avaliacao ? 'assets/svg/hearts (2).png' : 'assets/svg/cry (1).png'"
+                     alt="Avaliação"
+                     class="rating-icon">
+              </span>
+            </div>
+          </div>
+
+          <h2>Suas Notas</h2>
+          <div class="comment-card" *ngFor="let nota of livro.notas; let i = index">
+            <div class="book-info">
+              <div>
+                <p>{{ nota.data | date }} • Página {{nota.pagina || 'N/A'}}</p>
+              </div>
+            </div>
+            <p class="comment-text">{{ nota.texto }}</p>
+          </div>
+        </div>
+
+
+        <!-- Seção para Emprestados -->
+        <div *ngIf="livro.status === 'emprestado'" class="emprestimo-container">
+          <div class="rating-section">
+            <h3 style="color: #1F4040">Avalie o livro:</h3>
+            <div class="cat-rating">
+                <span *ngFor="let star of [1,2,3,4,5]" (click)="rateBook(star)">
+                <img [src]="star <= currentRating ? 'assets/svg/hearts (2).png' : 'assets/svg/cry (1).png'"
+                     alt="Avaliação"
+                     class="rating-icon">
+                </span>
+            </div>
+          </div>
+
+          <div class="notes-section">
+            <h3>Adicionar Nota</h3>
+            <div class="form-group">
+              <div class="page-selector">
+                <label>Página: {{paginaNota}} / {{livro.numeroPaginas}}</label>
+                <input type="range" min="1" [max]="livro.numeroPaginas"
+                       [(ngModel)]="paginaNota" class="page-slider">
+              </div>
+              <textarea [(ngModel)]="novaNota" placeholder="Escreva suas anotações..." class="fancy-textarea"></textarea>
+              <div class="button-books">
+                <button (click)="adicionarNota()" class="btn-save">Salvar Nota</button>
+                <button [class.btn-devolver-normal]="diasRestantes >= 0"
+                        [class.btn-devolver-atraso]="diasRestantes < 0" (click)="diasRestantes < 0 ? abrirModalMulta() : devolverLivro()">
+                  {{ diasRestantes < 0 ? 'Devolver com Atraso' : 'Devolver Livro' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="livro.notas?.length" class="comments-section">
+            <h2>Suas Notas</h2>
+            <div class="comment-card" *ngFor="let nota of livro.notas; let i = index">
+              <div class="book-info">
+                <div>
+                  <p>{{ nota.data | date }} • Página {{nota.pagina || 'N/A'}}</p>
+                </div>
+              </div>
+              <p class="comment-text">{{ nota.texto }}</p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Seção para Desejados -->
+        <div *ngIf="livro.status === 'desejado'" class="desejado-container">
+          <button *ngIf="livro.disponibilidade" class="btn-emprestar" (click)="abrirModalEmprestimo()">
+            SOLICITAR EMPRÉSTIMO
+          </button>
+          <button *ngIf="!livro.disponibilidade" class="btn-indisponivel" disabled>
+            NÃO É POSSÍVEL SOLICITAR
+            EMPRÉSTIMO
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal emprestimo -->
+  <div class="modal-overlay" *ngIf="showEmprestimoModal">
+    <div class="modal-content">
+      <h3>Confirmar Empréstimo</h3>
+      <p>Deseja realmente solicitar o empréstimo do livro <strong> "{{livro.titulo}}"</strong>?</p>
+
+      <div class="modal-actions">
+        <button class="modal-btn cancel-btn" (click)="cancelarEmprestimo()">Cancelar</button>
+        <button class="modal-btn confirm-btn" (click)="confirmarEmprestimo()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal multa devolucao -->
+  <div class="modal-overlay" *ngIf="showMultaModal">
+    <div class="modal-content">
+      <h3>Devolução com Atraso</h3>
+      <p>Você está devolvendo este livro com atraso de {{ -diasRestantes }} dias.</p>
+      <p class="multa-text">Será aplicada uma multa de R$ {{ calcularMulta() | number:'1.2-2' }}</p>
+
+      <div class="modal-actions">
+        <button class="modal-btn cancel-btn" (click)="showMultaModal = false">Cancelar</button>
+        <button class="modal-btn confirm-btn" (click)="confirmarDevolucaoComMulta()">Pagar Multa e Devolver</button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -12,32 +12,87 @@
 
     </app-header>
     <!-- Carrossel Principal -->
- <section class="featured-books">
-      <h2>Continue sua leitura</h2>
-      <div class="carousel-wrapper">
-        <div class="carousel-container">
-          <div class="carousel-track">
-            <div class="book-card" *ngFor="let book of featuredBooks">
-              <div class="book-image-container">
-                <img [src]="book.cover" [alt]="book.title">
-              </div>
-              <div class="book-info">
-                <h3>{{book.title}}</h3>
-                <p class="author">{{book.author}}</p>
-                <p class="description">{{book.description}}</p>
-                <button class="details-btn" (click)="viewDetails(book)">
-                  Saber mais <i class="bi bi-chevron-right"></i>
-                </button>
-              </div>
+    <section class="featured-books">
+      <h2>Livros do Acervo</h2>
+      <!-- Filtros por Categoria -->
+      <div class="category-filters">
+        <button
+          class="category-btn"
+          [class.active]="selectedCategory === ''"
+          (click)="filterByCategory('')"
+        >
+          Todos
+        </button>
+        <button
+          *ngFor="let category of categories"
+          class="category-btn"
+          [class.active]="selectedCategory === category"
+          (click)="filterByCategory(category)"
+        >
+          {{ category }}
+        </button>
+      </div>
+
+      <div class="books-grid">
+        <div class="books-row" *ngIf="paginatedBooks[0]">
+          <div class="book-card" *ngFor="let book of paginatedBooks[0]">
+            <div class="book-image-container">
+              <img [src]="book.capa" [alt]="book.titulo">
+            </div>
+            <div class="book-info">
+              <h3>{{book.titulo}}</h3>
+              <p class="author">{{book.autores}}</p>
+              <p class="description">
+                {{ (book.descricao || '') | slice:0:100 }}
+                {{ (book.descricao || '').length > 100 ? '...' : '' }}
+              </p>
+              <button class="details-btn"  [routerLink]="['/livro', book.id_livro]"
+                      [queryParams]="{estante: 'desejado'}">
+                Saber mais <i class="bi bi-chevron-right"></i>
+              </button>
             </div>
           </div>
         </div>
 
-        <button class="carousel-control prev" *ngIf="showPrevButton" (click)="prevSlide()">
-          <i class="bi bi-chevron-left"></i>
+        <div class="books-row" *ngIf="paginatedBooks[1]">
+          <div class="book-card" *ngFor="let book of paginatedBooks[1]">
+            <div class="book-image-container">
+              <img [src]="book.capa" [alt]="book.titulo">
+            </div>
+            <div class="book-info">
+              <h3>{{book.titulo}}</h3>
+              <p class="author">{{book.autores}}</p>
+              <p class="description">
+                {{ (book.descricao || '') | slice:0:100 }}
+                {{ (book.descricao || '').length > 100 ? '...' : '' }}
+              </p>
+              <button class="details-btn" [routerLink]="['/livro', book.id_livro]">
+                Saber mais <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pagination-controls">
+        <button
+          class="pagination-btn"
+          (click)="prevPage()"
+          [disabled]="currentPage === 1"
+        >
+          <i class="bi bi-chevron-left"></i> Anterior
         </button>
-        <button class="carousel-control next" *ngIf="showNextButton" (click)="nextSlide()">
-          <i class="bi bi-chevron-right"></i>
+
+        <span class="page-info">
+      Página {{currentPage}} de {{totalPages}}
+    </span>
+
+        <button
+          class="pagination-btn"
+          (click)="nextPage()"
+          [disabled]="currentPage === totalPages"
+        >
+          Próxima <i class="bi bi-chevron-right"></i>
         </button>
       </div>
     </section>
@@ -47,10 +102,10 @@
         <h3>{{collection.name}}</h3>
         <div class="books-grid">
           <div class="book-item" *ngFor="let book of collection.books">
-            <img [src]="book.cover" [alt]="book.title">
+            <img [src]="book.capa" [alt]="book.titulo">
             <div class="book-meta">
-              <span class="title">{{book.title }}</span>
-              <span class="author">{{book.author }}</span>
+              <span class="title">{{book.titulo }}</span>
+              <span class="author">{{book.autores }}</span>
             </div>
           </div>
         </div>

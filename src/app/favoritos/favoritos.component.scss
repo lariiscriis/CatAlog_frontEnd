@@ -69,3 +69,50 @@
     }
   }
 }
+
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.bookshelf-container {
+  padding: 20px;
+  flex: 1;
+}
+
+.shelf-section {
+  margin-bottom: 40px;
+}
+
+.book-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.book {
+  aspect-ratio: 2/3;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative;
+
+  &:hover {
+    transform: scale(1.05);
+    z-index: 1;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+}
+

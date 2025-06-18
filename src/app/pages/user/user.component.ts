@@ -5,19 +5,8 @@ import { RouterModule } from '@angular/router';
 import { BookService } from '../../services/book.service';
 import {HeaderComponent} from '../../components/header/header.component';
 import {SidebarComponent} from '../../components/sidebar/sidebar.component';
+import {Livro} from '../../types/livro.type';
 
-interface Book{
-  id: number;
-  title: string;
-  author: string;
-  cover: string;
-  description: string;
-}
-
-interface Collection {
-  name: string;
-  books: Book[];
-}
 
 @Component({
   selector: 'app-user',
@@ -29,171 +18,122 @@ interface Collection {
 
 
 
-export class UserComponent implements OnInit{
+export class UserComponent implements OnInit {
 
   user = {
     name: 'Usuário teste',
     photo: 'https://marketplace.canva.com/A5alg/MAESXCA5alg/1/tl/canva-user-icon-MAESXCA5alg.png'
   };
 
-  isLoading = true;
-  currentSlideIndex = 0;
-  offset = 0;
-  activeTab = 'home';
-  showPrevButton = false;
-  showNextButton = false;
-  private carouselContainer!: HTMLElement;
-  private carouselTrack!: HTMLElement;
+  allBooks: Livro[] = [];
+  filteredBooks: Livro[] = [];
+  categories: string[] = [];
+  selectedCategory: string = '';
+
+  currentPage: number = 1;
+  booksPerPage: number = 10;
+  paginatedBooks: any[] = [];
+
+  featuredBooks: Livro[] = [];
+  collections: { name: string, books: Livro[] }[] = [];
 
 
-
-  featuredBooks: Book[] = [
-  {
-    id: 1,
-    title: 'Fogo & Sangue',
-    author: 'George R.R. Martin',
-    cover: 'https://m.media-amazon.com/images/I/818yNY0mMZL.jpg',
-    description: 'A história da dinastia Targaryen em Westeros, expandindo a conquista dos Sete Reinos pela Casa Targaryen.'
-  },
-  {
-    id: 2,
-    title: 'O Senhor dos Anéis: A Sociedade do Anel',
-    author: 'J.R.R. Tolkien',
-    cover: 'https://m.media-amazon.com/images/I/81hCVEC0ExL.jpg',
-    description: 'A jornada de Frodo para destruir o Um Anel e salvar a Terra-média.'
-  },
-  {
-    id: 3,
-    title: 'Harry Potter e a Pedra Filosofal',
-    author: 'J.K. Rowling',
-    cover: 'https://m.media-amazon.com/images/I/81q77Q39nEL._AC_UF1000,1000_QL80_.jpg',
-    description: 'O início da jornada de Harry Potter na Escola de Magia e Bruxaria de Hogwarts.'
-  },
-  ];
-
-  collections: Collection[] = [
-    {
-      name: 'Recomendados para você',
-      books: [
-          {
-          id: 1,
-          title: 'Fogo & Sangue',
-          author: 'George R.R. Martin',
-          cover: 'https://m.media-amazon.com/images/I/818yNY0mMZL.jpg',
-          description: 'A história da dinastia Targaryen em Westeros, expandindo a conquista dos Sete Reinos pela Casa Targaryen.'
-        },
-       {
-          id: 2,
-          title: 'O Senhor dos Anéis: A Sociedade do Anel',
-          author: 'J.R.R. Tolkien',
-          cover: 'https://m.media-amazon.com/images/I/81hCVEC0ExL.jpg',
-          description: 'A jornada de Frodo para destruir o Um Anel e salvar a Terra-média.'
-        },
-
-      {
-        id: 3,
-        title: 'Harry Potter e a Pedra Filosofal',
-        author: 'J.K. Rowling',
-        cover: 'https://m.media-amazon.com/images/I/81q77Q39nEL._AC_UF1000,1000_QL80_.jpg',
-        description: 'O início da jornada de Harry Potter na Escola de Magia e Bruxaria de Hogwarts.'
-      },
-
-    ]
-    },
-
-    {
-      name: 'Novas aquisições da Biblioteca',
-      books: [          {
-          id: 1,
-          title: 'Fogo & Sangue',
-          author: 'George R.R. Martin',
-          cover: 'https://m.media-amazon.com/images/I/818yNY0mMZL.jpg',
-          description: 'A história da dinastia Targaryen em Westeros, expandindo a conquista dos Sete Reinos pela Casa Targaryen.'
-        },
-       {
-          id: 2,
-          title: 'O Senhor dos Anéis: A Sociedade do Anel',
-          author: 'J.R.R. Tolkien',
-          cover: 'https://m.media-amazon.com/images/I/81hCVEC0ExL.jpg',
-          description: 'A jornada de Frodo para destruir o Um Anel e salvar a Terra-média.'
-        },
-
-      {
-        id: 3,
-        title: 'Harry Potter e a Pedra Filosofal',
-        author: 'J.K. Rowling',
-        cover: 'https://m.media-amazon.com/images/I/81q77Q39nEL._AC_UF1000,1000_QL80_.jpg',
-        description: 'O início da jornada de Harry Potter na Escola de Magia e Bruxaria de Hogwarts.'
-      },]
-    }
-  ];
+  constructor(private bookservice: BookService) {
+  }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.initCarousel();
-      this.checkScrollButtons();
-    }, 0);  }
+    this.loadBooks();
 
-
-
-  @HostListener('window:resize')
-  onResize() {
-    this.checkScrollButtons();
   }
 
-  initCarousel(): void {
-    this.carouselContainer = document.querySelector('.carousel-container') as HTMLElement;
-    this.carouselTrack = document.querySelector('.carousel-track') as HTMLElement;
+  loadBooks(): void {
+    this.bookservice.getBooksFromDatabase().subscribe((livros: any[]) => {
+      console.log('📚 Livros recebidos:', livros);
+
+      this.allBooks = livros.map((livro: any) => ({
+        id_livro: livro.idLivro,
+        titulo: livro.titulo,
+        autores: livro.autores,
+        editora: livro.editora,
+        data_publicacao: livro.data_publicacao,
+        descricao: livro.descricao,
+        capa: livro.capa,
+        numero_paginas: livro.numero_paginas,
+        categoria: livro.categoria,
+        disponibilidade: livro.disponibilidade
+      }));
+      this.categories = [...new Set(this.allBooks
+        .map(book => book.categoria)
+        .filter((cat): cat is string => !!cat && cat.trim() !== '')
+      )].sort() as string[];
+
+
+      this.filteredBooks = [...this.allBooks];
+      this.collections = [
+        {
+          name: 'Novas aquisições da Biblioteca',
+          books: this.allBooks.slice(10, 15)
+        },
+        {
+          name: 'Recomendados para você',
+          books: this.allBooks.slice(20, 25)
+        }
+      ];
+    });
   }
 
-  checkScrollButtons(): void {
-    if (this.carouselContainer && this.carouselTrack) {
-      const containerWidth = this.carouselContainer.offsetWidth;
-      const trackWidth = this.carouselTrack.scrollWidth;
-      const scrollLeft = this.carouselContainer.scrollLeft;
+  filterByCategory(category: string): void {
+    this.selectedCategory = category;
+    this.currentPage = 1; // Reset para a primeira página
 
-      this.showPrevButton = scrollLeft > 0;
-      this.showNextButton = scrollLeft + containerWidth < trackWidth;
+    if (!category) {
+      this.filteredBooks = [...this.allBooks];
+    } else {
+      this.filteredBooks = this.allBooks.filter(book =>
+        book.categoria === category
+      );
+    }
+
+    this.updatePagination();
+  }
+
+  updatePagination(): void {
+    const startIndex = (this.currentPage - 1) * this.booksPerPage;
+    const endIndex = startIndex + this.booksPerPage;
+    const currentBooks = this.filteredBooks.slice(startIndex, endIndex);
+
+    // Divide em duas linhas de 5 livros cada
+    this.paginatedBooks = [
+      currentBooks.slice(0, 4),
+      currentBooks.slice(4, 8)
+    ];
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredBooks.length / this.booksPerPage);
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
     }
   }
 
-  nextSlide(): void {
-    if (this.carouselContainer) {
-      const containerWidth = this.carouselContainer.offsetWidth;
-      this.carouselContainer.scrollBy({
-        left: containerWidth * 0.8,
-        behavior: 'smooth'
-      });
-
-      // Atualiza os botões após a animação
-      setTimeout(() => this.checkScrollButtons(), 500);
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
     }
   }
 
-  prevSlide(): void {
-    if (this.carouselContainer) {
-      const containerWidth = this.carouselContainer.offsetWidth;
-      this.carouselContainer.scrollBy({
-        left: -containerWidth * 0.8,
-        behavior: 'smooth'
-      });
-
-      // Atualiza os botões após a animação
-      setTimeout(() => this.checkScrollButtons(), 500);
-    }
+  viewDetails(book: Livro): void {
+    // implementar navegação ou modal
   }
 
-  updateOffset(): void {
-    this.offset = -this.currentSlideIndex * 100;
-  }
 
-  setActiveTab(tab: string): void {
-    this.activeTab = tab;
 
-  }
 
-  viewDetails(book: Book): void {
-  }
 
   logout(): void {
   }

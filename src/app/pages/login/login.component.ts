@@ -33,18 +33,24 @@ export class LoginComponent {
     })
   }
 
-  submit(){
-    this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
-      next: () =>{
+submit() {
+  console.log("Form enviado:", this.loginForm.value);
+  this.loginService.login(this.loginForm.value.email, this.loginForm.value.password).subscribe({
+    next: (usuario) => {
+      console.log("Login realizado, redirecionando para /user", usuario);
       this.toastrService.success("Login realizado com sucesso!");
-        setTimeout(() => {
-          this.router.navigate(["user"]);
-        }, 1000);
-        },
-      error: () => this.toastrService.error("Falha no login. Verifique seus dados e tente novamente.")
-    })
 
-  }
+      setTimeout(() => {
+        this.router.navigate(["user"]);
+      }, 1000);
+    },
+    error: (err) => {
+      console.error("Erro no login:", err);
+      this.toastrService.error("Falha no login. Verifique seus dados e tente novamente.");
+    }
+  });
+}
+
   navigate(){
     this.router.navigate(["signup"]);
   }

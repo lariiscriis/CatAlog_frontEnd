@@ -1,64 +1,66 @@
+// desejados.component.ts
 import { Component, OnInit } from '@angular/core';
 import { EstanteService } from '../services/estante.service';
-import {Livro, LivroEstante} from '../types/livro.type';
-import {SidebarComponent} from '../components/sidebar/sidebar.component';
-import {HeaderComponent} from '../components/header/header.component';
-import {Router, RouterLink} from '@angular/router';
-import {CommonModule} from '@angular/common';
+import { UsuarioService } from '../services/usuario.service';
+import { Livro } from '../types/livro.type';
+import { SidebarComponent } from '../components/sidebar/sidebar.component';
+import { HeaderComponent } from '../components/header/header.component';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
-interface Shelf {
-  books: Livro[];
-}
+interface Shelf { books: Livro[] }
 
 @Component({
+  standalone: true,
   selector: 'app-desejados',
   templateUrl: './desejados.component.html',
-  imports: [
-    SidebarComponent,
-    HeaderComponent,
-    CommonModule,
-    RouterLink
-  ],
-  styleUrls: ['./desejados.component.scss']
+  styleUrls: ['./desejados.component.scss'],
+  imports: [ SidebarComponent, HeaderComponent, CommonModule, RouterLink ]
 })
 export class DesejadosComponent implements OnInit {
   shelves: Shelf[] = [];
-  usuarioId = 'ed94a5a8-1d2d-409f-806e-4827f60fd4ff';
 
-  constructor(private estanteService: EstanteService,private router: Router) {}
+  constructor(
+    private estanteService: EstanteService,
+    private usuarioService: UsuarioService
+  ) {}
 
   ngOnInit(): void {
-    this.carregarLivrosDesejados();
+    // 1) primeiro pega o usuário logado
+    this.usuarioService.getUsuarioLogado().subscribe({
+      next: user => {
+        if (!user?.id) {
+          console.error('Usuário não autenticado');
+          return;
+        }
+        // 2) aí sim carrega a estante “desejado”
+        this.carregarLivrosDesejados(user.id);
+      },
+      error: err => console.error('Erro ao buscar usuário logado', err)
+    });
   }
 
-  carregarLivrosDesejados(): void {
-    this.estanteService.listarLivros(this.usuarioId, 'desejado')
+  private carregarLivrosDesejados(usuarioId: string) {
+    this.estanteService.listarLivros(usuarioId, 'desejado')
       .subscribe({
-        next: (livros) => {
-          this.shelves = this.organizarEmEstantes(livros);
-        },
-        error: (err) => console.error('Erro ao carregar desejados:', err)
+        next: livros => this.shelves = this.organizarEmEstantes(livros),
+        error: err => console.error('Erro ao carregar desejados:', err)
       });
   }
 
-  organizarEmEstantes(livros: Livro[]): Shelf[] {
+  private organizarEmEstantes(livros: Livro[]): Shelf[] {
+    const chunkSize = 9;
     const shelves: Shelf[] = [];
-    const livrosPorEstante = 9;
-
-    for (let i = 0; i < livros.length; i += livrosPorEstante) {
-      const chunk = livros.slice(i, i + livrosPorEstante);
-      shelves.push({ books: chunk });
+    for (let i = 0; i < livros.length; i += chunkSize) {
+      shelves.push({ books: livros.slice(i, i + chunkSize) });
     }
-
-    if (shelves.length === 0) {
-      shelves.push({ books: [] });
-    }
-
+    // se não tiver nada, garantir seção vazia
+    if (shelves.length === 0) shelves.push({ books: [] });
     return shelves;
   }
 
-  getEmptySlots(booksCount: number): number[] {
-    return Array(9 - booksCount).fill(0);
+  // opcional: pra renderizar espaços vazios no HTML
+  getEmptySlots(count: number) {
+    return Array(9 - count).fill(0);
   }
-
 }

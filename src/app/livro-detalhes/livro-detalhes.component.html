@@ -9,7 +9,6 @@
         <div class="badge" *ngIf="livro.status === 'emprestado'">
           Devolução: {{ diasRestantes }} dias
         </div>
-
       </div>
 
       <div class="info-container">
@@ -18,13 +17,14 @@
           <h1>{{ livro.titulo }}</h1>
 
           <div class="book-actions">
-            <button class="action-btn favorite-btn">
+            <button class="action-btn favorite-btn" (click)="adicionarFavorito()">
               <i class="bi bi-heart"></i>
             </button>
-            <button class="action-btn wishlist-btn" >
+            <button class="action-btn wishlist-btn" (click)="adicionarDesejado()">
               <i class="bi bi-bookmark"></i>
             </button>
           </div>
+
         </div>
         <h2>{{ livro.autores }}</h2>
         <p class="publicacao">{{ livro.editora }} • {{ livro.data_publicacao | date }}</p>
@@ -89,7 +89,7 @@
               <div class="button-books">
                 <button (click)="adicionarNota()" class="btn-save">Salvar Nota</button>
                 <button [class.btn-devolver-normal]="diasRestantes >= 0"
-                        [class.btn-devolver-atraso]="diasRestantes < 0" (click)="diasRestantes < 0 ? abrirModalMulta() : devolverLivro()">
+                        [class.btn-devolver-atraso]="diasRestantes < 0" (click)="diasRestantes < 0 ? abrirModalMulta() : devolverLivroAtual()">
                   {{ diasRestantes < 0 ? 'Devolver com Atraso' : 'Devolver Livro' }}
                 </button>
               </div>

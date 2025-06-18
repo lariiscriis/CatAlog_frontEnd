@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterLink } from '@angular/router';
 import { SidebarComponent } from '../components/sidebar/sidebar.component';
 import { HeaderComponent } from '../components/header/header.component';
 import { EstanteService } from '../services/estante.service';
+import { UsuarioService } from '../services/usuario.service';
 import { Livro } from '../types/livro.type';
 
 interface Shelf {
@@ -13,31 +14,42 @@ interface Shelf {
 @Component({
   selector: 'app-favoritos',
   standalone: true,
-  imports: [CommonModule, RouterModule, SidebarComponent, HeaderComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    RouterLink,
+    SidebarComponent,
+    HeaderComponent
+  ],
   templateUrl: './favoritos.component.html',
   styleUrls: ['./favoritos.component.scss']
 })
+
 export class FavoritosComponent implements OnInit {
   shelves: Shelf[] = [];
-  usuarioId = 'ed94a5a8-1d2d-409f-806e-4827f60fd4ff';
 
-  user = {
-    name: 'Usuário teste',
-    photo: 'https://marketplace.canva.com/A5alg/MAESXCA5alg/1/tl/canva-user-icon-MAESXCA5alg.png'
-  };
-
-  constructor(private estanteService: EstanteService) {}
+  constructor(
+    private estanteService: EstanteService,
+    private usuarioService: UsuarioService
+  ) {}
 
   ngOnInit(): void {
-    this.carregarLivrosFavoritos();
+    this.usuarioService.getUsuarioLogado().subscribe({
+      next: (usuario) => {
+        if (!usuario?.id) {
+          console.error('Usuário não autenticado');
+          return;
+        }
+        this.carregarLivrosFavoritos(usuario.id);
+      },
+      error: (err) => console.error('Erro ao obter usuário logado:', err)
+    });
   }
 
-  carregarLivrosFavoritos(): void {
-    this.estanteService.listarLivros(this.usuarioId, 'favorito')
+  carregarLivrosFavoritos(usuarioId: string): void {
+    this.estanteService.listarLivros(usuarioId, 'favorito')
       .subscribe({
         next: (livros) => {
-          console.log('Dados recebidos da API:', livros); // Debug
-
           this.shelves = this.organizarEmEstantes(livros);
         },
         error: (err) => console.error('Erro ao carregar favoritos:', err)
@@ -60,5 +72,7 @@ export class FavoritosComponent implements OnInit {
     return shelves;
   }
 
-
+  getEmptySlots(booksCount: number): number[] {
+    return Array(9 - booksCount).fill(0);
+  }
 }

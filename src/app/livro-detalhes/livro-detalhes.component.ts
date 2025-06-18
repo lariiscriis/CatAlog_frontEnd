@@ -11,6 +11,7 @@ import {UsuarioService} from '../services/usuario.service';
 import { HttpHeaders } from '@angular/common/http';
 import { AnotacaoService } from '../services/anotacao.service';
 import { Anotacao } from '../types/anotacao.type';
+import { ToastrService } from 'ngx-toastr';
 
 import {EstanteService} from '../services/estante.service';
 
@@ -45,7 +46,9 @@ export class LivroDetalhesComponent implements OnInit {
     private emprestimoService: EmprestimoService,
     private usuarioService: UsuarioService,
     private anotacaoService: AnotacaoService,
-    private estanteService: EstanteService
+    private estanteService: EstanteService,
+    private toastr: ToastrService
+
 
 ) {}
 
@@ -102,6 +105,47 @@ export class LivroDetalhesComponent implements OnInit {
     }
   }
 
+  adicionarFavorito(): void {
+  this.usuarioService.getUsuarioLogado().subscribe(usuario => {
+    if (!usuario?.id || !this.livro?.id_livro) {
+      this.toastr.error('Usuário ou livro inválido para adicionar aos favoritos.');
+      return;
+    }
+
+    this.estanteService.adicionarLivro(usuario.id, this.livro.id_livro, 'favorito').subscribe({
+      next: () => {
+        this.toastr.success('Livro adicionado aos favoritos!');
+        this.livro.status = 'favorito';
+      },
+      error: (err) => {
+        console.error('Erro ao adicionar favorito:', err);
+        this.toastr.error('Erro ao adicionar aos favoritos.');
+      }
+    });
+  });
+}
+
+// Método para adicionar como desejado
+adicionarDesejado(): void {
+  this.usuarioService.getUsuarioLogado().subscribe(usuario => {
+    if (!usuario?.id || !this.livro?.id_livro) {
+      this.toastr.error('Usuário ou livro inválido para adicionar à lista de desejos.');
+      return;
+    }
+
+    this.estanteService.adicionarLivro(usuario.id, this.livro.id_livro, 'desejado').subscribe({
+      next: () => {
+        this.toastr.success('Livro adicionado à lista de desejos!');
+        this.livro.status = 'desejado';
+      },
+      error: (err) => {
+        console.error('Erro ao adicionar desejado:', err);
+        this.toastr.error('Erro ao adicionar à lista de desejos.');
+      }
+    });
+  });
+}
+
 adicionarNota(): void {
   if (this.novaNota.trim()) {
     this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
@@ -133,24 +177,56 @@ adicionarNota(): void {
     // lógica para salvar a avaliação
   }
 
-  devolverLivro(): void {
-    alert('Livro devolvido com sucesso!');
-  }
+devolverLivroAtual(): void {
+  this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
+    if (!usuario?.id || !this.livro?.id_livro) {
+      this.toastr.error('Usuário ou livro inválido.');
+      return;
+    }
 
-  calcularMulta(): number {
-    const diasAtraso = -this.diasRestantes;
-    return diasAtraso * 2;
-  }
+    this.emprestimoService.buscarEmprestimosAtivos(usuario.id).subscribe({
+      next: (emprestimos) => {
+    const emprestimoDoLivro = emprestimos.find(e =>
+      (e.livro?.id_livro ||e?.idLivro) === this.livro?.id_livro
+    );
+
+        if (emprestimoDoLivro?.idEmprestimo) {
+          this.emprestimoService.devolverEmprestimo(emprestimoDoLivro.idEmprestimo).subscribe({
+            next: () => {
+              this.toastr.success('Livro devolvido com sucesso!');
+              this.livro.status = 'favorito';
+            },
+            error: () => this.toastr.error('Erro ao devolver o livro.')
+          });
+        }
+        else {
+          this.toastr.warning('Nenhum empréstimo ativo encontrado para este livro.');
+        }
+      },
+      error: () => this.toastr.error('Erro ao buscar empréstimos do usuário.')
+    });
+  });
+}
+
+
+calcularMulta(): number {
+  const diasAtraso = -this.diasRestantes;
+  return diasAtraso > 0 ? diasAtraso * 2 : 0;
+}
+temMulta(): boolean {
+  return this.diasRestantes < 0;
+}
 
   abrirModalMulta(): void {
     this.showMultaModal = true;
   }
 
-  confirmarDevolucaoComMulta(): void {
-    this.showMultaModal = false;
-    alert(`Multa de R$ ${this.calcularMulta().toFixed(2)} paga com sucesso!`);
-    this.devolverLivro();
-  }
+confirmarDevolucaoComMulta(): void {
+  this.showMultaModal = false;
+  this.toastr.success(`Multa de R$ ${this.calcularMulta().toFixed(2)} paga com sucesso!`);
+  this.devolverLivroAtual();
+}
+
 
   abrirModalEmprestimo(): void {
     this.showEmprestimoModal = true;
@@ -166,8 +242,8 @@ adicionarNota(): void {
   }
 
   solicitarEmprestimo(): void {
-    const token = sessionStorage.getItem('auth-token');
-    console.log('Token no sessionStorage:', token);
+    const token = localStorage.getItem('auth-token');
+    console.log('Token no localStorage:', token);
 
     if (!token) {
       alert('Token não encontrado! Faça login novamente.');

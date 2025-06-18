@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    const authToken = sessionStorage.getItem('auth-token'); //authtoken salvo em login service após o cadastro ou login
+    const authToken = localStorage.getItem('auth-token'); //authtoken salvo em login service após o cadastro ou login
 
 //toda vez que a rota user for acessada, será verificado se ele tem o authtoken no session storage ele pode acessar a rota, caso contrário volta pra tela de login
     if (authToken) {

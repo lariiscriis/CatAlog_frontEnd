@@ -9,6 +9,9 @@ import {BookService} from '../services/book.service';
 import {EmprestimoService} from '../services/emprestimo.service';
 import {UsuarioService} from '../services/usuario.service';
 import { HttpHeaders } from '@angular/common/http';
+import { AnotacaoService } from '../services/anotacao.service';
+import { Anotacao } from '../types/anotacao.type';
+
 
 @Component({
   standalone: true,
@@ -33,12 +36,15 @@ export class LivroDetalhesComponent implements OnInit {
   activeTab: 'notas' | 'avaliacao' = 'notas';
   showEmprestimoModal: boolean = false;
   showMultaModal: boolean = false;
+  anotacoes: Anotacao[] = []
 
   constructor(
     private route: ActivatedRoute,
     private bookService: BookService,
     private emprestimoService: EmprestimoService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private anotacaoService: AnotacaoService
+
   ) {}
 
   ngOnInit(): void {
@@ -63,6 +69,16 @@ export class LivroDetalhesComponent implements OnInit {
       });
     }
     this.calcularDiasRestantes();
+
+    this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
+    if (usuario?.id && this.livro?.id_livro) {
+      this.anotacaoService.listarPorLivro(usuario.id, this.livro.id_livro).subscribe({
+        next: (notas) => this.anotacoes = notas,
+        error: () => console.error('Erro ao carregar anotações'),
+      });
+    }
+  });
+
   }
 
   // Método privado para mapear o objeto da API para o formato esperado
@@ -85,18 +101,31 @@ export class LivroDetalhesComponent implements OnInit {
     }
   }
 
-  adicionarNota(): void {
-    if (this.novaNota.trim()) {
-      this.livro.notas = this.livro.notas || [];
-      this.livro.notas.unshift({
+adicionarNota(): void {
+  if (this.novaNota.trim()) {
+    this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
+      if (!usuario?.id || !this.livro?.id_livro) return;
+
+      const nova: Anotacao = {
         texto: this.novaNota,
-        data: new Date(),
         pagina: this.paginaNota,
+        data: new Date().toISOString(),
+        idUsuario: usuario.id,
+        idLivro: this.livro.id_livro,
+      };
+
+      this.anotacaoService.criar(nova).subscribe({
+        next: (anotacaoSalva) => {
+          this.anotacoes.unshift(anotacaoSalva);
+          this.novaNota = '';
+          this.paginaNota = 1;
+        },
+        error: () => alert('Erro ao salvar anotação'),
       });
-      this.novaNota = '';
-      this.paginaNota = 1;
-    }
+    });
   }
+}
+
 
   rateBook(rating: number): void {
     this.currentRating = rating;

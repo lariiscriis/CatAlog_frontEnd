@@ -24,7 +24,7 @@ export class UsuarioService {
   constructor(private http: HttpClient) {}
 
   private getToken(): string {
-    return localStorage.getItem('token') || '';
+    return localStorage.getItem('auth-token') || '';
   }
 
   private getAuthHeaders(): HttpHeaders {

@@ -96,17 +96,21 @@
             </div>
           </div>
 
-          <div *ngIf="livro.notas?.length" class="comments-section">
-            <h2>Suas Notas</h2>
-            <div class="comment-card" *ngFor="let nota of livro.notas; let i = index">
-              <div class="book-info">
-                <div>
-                  <p>{{ nota.data | date }} • Página {{nota.pagina || 'N/A'}}</p>
-                </div>
-              </div>
-              <p class="comment-text">{{ nota.texto }}</p>
+          <div class="anotacoes">
+            <h3>Anotações</h3>
+
+            <div *ngFor="let nota of anotacoes">
+              <p><strong>Página {{ nota.pagina }}:</strong> {{ nota.texto }}</p>
+              <small>{{ nota.data | date:'short' }}</small>
+            </div>
+
+            <div class="nova-anotacao">
+              <textarea [(ngModel)]="novaNota" placeholder="Digite uma anotação..."></textarea>
+              <input type="number" [(ngModel)]="paginaNota" placeholder="Página">
+              <button (click)="adicionarNota()">Salvar</button>
             </div>
           </div>
+
 
         </div>
 

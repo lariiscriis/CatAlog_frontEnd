@@ -95,23 +95,19 @@
               </div>
             </div>
           </div>
+    <div class="comments-section">
 
-          <div class="anotacoes">
+          <div class="anotacoes" >
             <h3>Anotações</h3>
 
-            <div *ngFor="let nota of anotacoes">
-              <p><strong>Página {{ nota.pagina }}:</strong> {{ nota.texto }}</p>
-              <small>{{ nota.data | date:'short' }}</small>
+            <div class="comment-card"  *ngFor="let nota of anotacoes">
+              <p><strong>Página {{ nota.pagina }}:</strong> {{ nota.nota }}</p>
+              <small>{{ nota.dataNota | date:'short' }}</small>
             </div>
 
-            <div class="nova-anotacao">
-              <textarea [(ngModel)]="novaNota" placeholder="Digite uma anotação..."></textarea>
-              <input type="number" [(ngModel)]="paginaNota" placeholder="Página">
-              <button (click)="adicionarNota()">Salvar</button>
-            </div>
           </div>
 
-
+</div>
         </div>
 
         <!-- Seção para Desejados -->

@@ -11,6 +11,10 @@ export class AnotacaoService {
 
   constructor(private http: HttpClient) {}
 
+  listarPorUsuario(idUsuario: string): Observable<Anotacao[]> {
+  return this.http.get<Anotacao[]>(`${this.apiUrl}/${idUsuario}`);
+}
+
   listarPorLivro(idUsuario: string, idLivro: string): Observable<Anotacao[]> {
     return this.http.get<Anotacao[]>(`${this.apiUrl}/${idUsuario}/livro/${idLivro}`);
   }

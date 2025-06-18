@@ -1,8 +1,13 @@
 export interface Anotacao {
-  id?: number;
-  texto: string;
-  pagina: number;
-  data: string;
-  idUsuario: string;
+  idAnotacao?: number;
   idLivro: string;
+  id: string;
+  nota: string;
+  pagina: number;
+  dataNota: string;
+  avaliacao:number;
+  livro?: {
+    titulo: string;
+    capa: string;
+  };
 }

@@ -1,44 +1,42 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {HeaderComponent} from '../components/header/header.component';
-import {SidebarComponent} from '../components/sidebar/sidebar.component';
-import {FormsModule} from '@angular/forms';
-import {Livro, LivroEstante} from '../types/livro.type';
-import {DatePipe, CommonModule} from '@angular/common';
-import {BookService} from '../services/book.service';
-import {EmprestimoService} from '../services/emprestimo.service';
-import {UsuarioService} from '../services/usuario.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HeaderComponent } from '../components/header/header.component';
+import { SidebarComponent } from '../components/sidebar/sidebar.component';
+import { CommonModule, DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Livro, LivroEstante } from '../types/livro.type';
+import { BookService } from '../services/book.service';
+import { EmprestimoService } from '../services/emprestimo.service';
+import { UsuarioService } from '../services/usuario.service';
 import { AnotacaoService } from '../services/anotacao.service';
 import { Anotacao } from '../types/anotacao.type';
+import { EstanteService } from '../services/estante.service';
 import { ToastrService } from 'ngx-toastr';
 
-import {EstanteService} from '../services/estante.service';
-
 @Component({
-  standalone: true,
   selector: 'app-livro-detalhes',
+  standalone: true,
   templateUrl: './livro-detalhes.component.html',
   styleUrls: ['./livro-detalhes.component.scss'],
   imports: [
     HeaderComponent,
     SidebarComponent,
+    CommonModule,
     FormsModule,
     DatePipe,
-    CommonModule,
   ],
 })
 export class LivroDetalhesComponent implements OnInit {
   livro!: LivroEstante;
-  estante!: 'favorito' | 'desejado' | 'emprestado';
-  novaNota: string = '';
-  diasRestantes: number = 0;
-  currentRating: number = 0;
-  paginaNota: number = 1;
+  estante: 'favorito' | 'desejado' | 'emprestado' = 'favorito';
+  anotacoes: Anotacao[] = [];
+  novaNota = '';
+  paginaNota = 1;
+  diasRestantes = 0;
+  currentRating = 0;
   activeTab: 'notas' | 'avaliacao' = 'notas';
-  showEmprestimoModal: boolean = false;
-  showMultaModal: boolean = false;
-  anotacoes: Anotacao[] = []
+  showEmprestimoModal = false;
+  showMultaModal = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,17 +46,15 @@ export class LivroDetalhesComponent implements OnInit {
     private anotacaoService: AnotacaoService,
     private estanteService: EstanteService,
     private toastr: ToastrService
-
-
-) {}
+  ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     const estanteParam = this.route.snapshot.queryParamMap.get('estante');
-
     const estantesValidas = ['favorito', 'desejado', 'emprestado'] as const;
+
     this.estante = estantesValidas.includes(estanteParam as any)
-      ? (estanteParam as 'favorito' | 'desejado' | 'emprestado')
+      ? (estanteParam as typeof this.estante)
       : 'favorito';
 
     if (id) {
@@ -67,97 +63,71 @@ export class LivroDetalhesComponent implements OnInit {
           this.livro = this.mapLivroApiToLivroEstante(data);
           this.livro.status = this.estante;
           this.calcularDiasRestantes();
+          this.carregarAnotacoes();
         },
-        error: (err) => {
-          console.error('Erro ao buscar livro:', err);
-        },
+        error: (err) => this.toastr.error('Erro ao buscar livro'),
       });
     }
-    this.calcularDiasRestantes();
-
-    this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
-    if (usuario?.id && this.livro?.id_livro) {
-      this.anotacaoService.listarPorLivro(usuario.id, this.livro.id_livro).subscribe({
-        next: (notas) => this.anotacoes = notas,
-        error: () => console.error('Erro ao carregar anotações'),
-      });
-    }
-  });
-
   }
 
-  // Método privado para mapear o objeto da API para o formato esperado
   private mapLivroApiToLivroEstante(data: any): LivroEstante {
     return {
       ...data,
-      id_livro: data?.idLivro,
+      id_livro: data.idLivro,
       data_devolucao: data.dataDevolucao,
     };
   }
 
-  calcularDiasRestantes(): void {
-    if (this.livro?.data_devolucao) {
-      const hoje = new Date();
-      const devolucao = new Date(this.livro.data_devolucao);
-      this.diasRestantes = Math.ceil(
-        (devolucao.getTime() - hoje.getTime()) / (1000 * 3600 * 24)
-      );
+private carregarAnotacoes(): void {
+  this.usuarioService.getUsuarioLogado().subscribe(usuario => {
+    if (usuario?.id && this.livro?.id_livro) {
+      this.anotacaoService.listarPorLivro(usuario.id, this.livro.id_livro).subscribe({
+        next: (notas) => {
+          this.anotacoes = notas;
+        },
+        error: () => this.toastr.error('Erro ao carregar anotações')
+      });
     }
-  }
+  });
+}
+
 
   adicionarFavorito(): void {
-  this.usuarioService.getUsuarioLogado().subscribe(usuario => {
-    if (!usuario?.id || !this.livro?.id_livro) {
-      this.toastr.error('Usuário ou livro inválido para adicionar aos favoritos.');
-      return;
-    }
+    this.adicionarNaEstante('favorito');
+  }
 
-    this.estanteService.adicionarLivro(usuario.id, this.livro.id_livro, 'favorito').subscribe({
-      next: () => {
-        this.toastr.success('Livro adicionado aos favoritos!');
-        this.livro.status = 'favorito';
-      },
-      error: (err) => {
-        console.error('Erro ao adicionar favorito:', err);
-        this.toastr.error('Erro ao adicionar aos favoritos.');
-      }
-    });
-  });
-}
+  adicionarDesejado(): void {
+    this.adicionarNaEstante('desejado');
+  }
 
-// Método para adicionar como desejado
-adicionarDesejado(): void {
-  this.usuarioService.getUsuarioLogado().subscribe(usuario => {
-    if (!usuario?.id || !this.livro?.id_livro) {
-      this.toastr.error('Usuário ou livro inválido para adicionar à lista de desejos.');
-      return;
-    }
-
-    this.estanteService.adicionarLivro(usuario.id, this.livro.id_livro, 'desejado').subscribe({
-      next: () => {
-        this.toastr.success('Livro adicionado à lista de desejos!');
-        this.livro.status = 'desejado';
-      },
-      error: (err) => {
-        console.error('Erro ao adicionar desejado:', err);
-        this.toastr.error('Erro ao adicionar à lista de desejos.');
-      }
-    });
-  });
-}
-
-adicionarNota(): void {
-  if (this.novaNota.trim()) {
-    this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
+  private adicionarNaEstante(tipo: 'favorito' | 'desejado' | 'emprestado'): void {
+    this.usuarioService.getUsuarioLogado().subscribe(usuario => {
       if (!usuario?.id || !this.livro?.id_livro) return;
 
-      const nova: Anotacao = {
-        texto: this.novaNota,
-        pagina: this.paginaNota,
-        data: new Date().toISOString(),
-        idUsuario: usuario.id,
-        idLivro: this.livro.id_livro,
-      };
+      this.estanteService.adicionarLivro(usuario.id, this.livro.id_livro, tipo).subscribe({
+        next: () => {
+          this.toastr.success(`Livro adicionado à estante "${tipo}"`);
+          this.livro.status = tipo;
+        },
+        error: () => this.toastr.error(`Erro ao adicionar "${tipo}"`),
+      });
+    });
+  }
+
+  adicionarNota(): void {
+    if (!this.novaNota.trim()) return;
+
+    this.usuarioService.getUsuarioLogado().subscribe(usuario => {
+      if (!usuario?.id || !this.livro?.id_livro) return;
+
+     const nova: Anotacao = {
+  nota: this.novaNota,
+  pagina: this.paginaNota,
+  dataNota: new Date().toISOString(),
+  id: usuario.id,
+  idLivro: this.livro.id_livro,
+  avaliacao: this.currentRating || 0, // ou algum valor padrão se 0 não for válido
+};
 
       this.anotacaoService.criar(nova).subscribe({
         next: (anotacaoSalva) => {
@@ -165,68 +135,65 @@ adicionarNota(): void {
           this.novaNota = '';
           this.paginaNota = 1;
         },
-        error: () => alert('Erro ao salvar anotação'),
+        error: () => this.toastr.error('Erro ao salvar anotação'),
       });
     });
   }
-}
-
 
   rateBook(rating: number): void {
-    this.currentRating = rating;
-    // lógica para salvar a avaliação
+  this.currentRating = rating;
+}
+
+
+  calcularDiasRestantes(): void {
+    if (!this.livro?.data_devolucao) return;
+    const hoje = new Date();
+    const devolucao = new Date(this.livro.data_devolucao);
+    this.diasRestantes = Math.ceil((devolucao.getTime() - hoje.getTime()) / (1000 * 3600 * 24));
   }
 
-devolverLivroAtual(): void {
-  this.usuarioService.getUsuarioLogado().subscribe((usuario) => {
-    if (!usuario?.id || !this.livro?.id_livro) {
-      this.toastr.error('Usuário ou livro inválido.');
-      return;
-    }
+  temMulta(): boolean {
+    return this.diasRestantes < 0;
+  }
 
-    this.emprestimoService.buscarEmprestimosAtivos(usuario.id).subscribe({
-      next: (emprestimos) => {
-    const emprestimoDoLivro = emprestimos.find(e =>
-      (e.livro?.id_livro ||e?.idLivro) === this.livro?.id_livro
-    );
-
-        if (emprestimoDoLivro?.idEmprestimo) {
-          this.emprestimoService.devolverEmprestimo(emprestimoDoLivro.idEmprestimo).subscribe({
-            next: () => {
-              this.toastr.success('Livro devolvido com sucesso!');
-              this.livro.status = 'favorito';
-            },
-            error: () => this.toastr.error('Erro ao devolver o livro.')
-          });
-        }
-        else {
-          this.toastr.warning('Nenhum empréstimo ativo encontrado para este livro.');
-        }
-      },
-      error: () => this.toastr.error('Erro ao buscar empréstimos do usuário.')
-    });
-  });
-}
-
-
-calcularMulta(): number {
-  const diasAtraso = -this.diasRestantes;
-  return diasAtraso > 0 ? diasAtraso * 2 : 0;
-}
-temMulta(): boolean {
-  return this.diasRestantes < 0;
-}
+  calcularMulta(): number {
+    const diasAtraso = -this.diasRestantes;
+    return diasAtraso > 0 ? diasAtraso * 2 : 0;
+  }
 
   abrirModalMulta(): void {
     this.showMultaModal = true;
   }
 
-confirmarDevolucaoComMulta(): void {
-  this.showMultaModal = false;
-  this.toastr.success(`Multa de R$ ${this.calcularMulta().toFixed(2)} paga com sucesso!`);
-  this.devolverLivroAtual();
-}
+  confirmarDevolucaoComMulta(): void {
+    this.showMultaModal = false;
+    this.toastr.success(`Multa de R$ ${this.calcularMulta().toFixed(2)} paga com sucesso!`);
+    this.devolverLivroAtual();
+  }
 
+  devolverLivroAtual(): void {
+    this.usuarioService.getUsuarioLogado().subscribe(usuario => {
+      if (!usuario?.id || !this.livro?.id_livro) return;
+
+      this.emprestimoService.buscarEmprestimosAtivos(usuario.id).subscribe({
+        next: (emprestimos) => {
+          const emprestimo = emprestimos.find(e => (e.livro?.id_livro || e?.idLivro) === this.livro.id_livro);
+          if (emprestimo?.idEmprestimo) {
+            this.emprestimoService.devolverEmprestimo(emprestimo.idEmprestimo).subscribe({
+              next: () => {
+                this.toastr.success('Livro devolvido com sucesso!');
+                this.livro.status = 'favorito';
+              },
+              error: () => this.toastr.error('Erro ao devolver o livro.'),
+            });
+          } else {
+            this.toastr.warning('Nenhum empréstimo ativo para este livro.');
+          }
+        },
+        error: () => this.toastr.error('Erro ao buscar empréstimos.'),
+      });
+    });
+  }
 
   abrirModalEmprestimo(): void {
     this.showEmprestimoModal = true;
@@ -243,70 +210,30 @@ confirmarDevolucaoComMulta(): void {
 
   solicitarEmprestimo(): void {
     const token = localStorage.getItem('auth-token');
-    console.log('Token no localStorage:', token);
+    if (!token) return alert('Token ausente. Faça login.');
 
-    if (!token) {
-      alert('Token não encontrado! Faça login novamente.');
-      return;
-    }
-
-    if (!this.livro?.id_livro) {
-      alert('ID do livro inválido. Aguarde o carregamento do livro.');
-      return;
-    }
-
-
-    console.log('ID do livro:', this.livro.id_livro);
+    if (!this.livro?.id_livro) return alert('Livro inválido.');
 
     this.usuarioService.getUsuarioLogado().subscribe({
       next: (usuario) => {
-        if (!usuario?.id) {
-          alert('ID do usuário não encontrado. Faça login novamente.');
-          return;
-        }
+        if (!usuario?.id) return alert('Usuário inválido.');
 
-        console.log('Usuário no serviço:', usuario);
-        console.log('Dados do empréstimo:', {
-          livroId: this.livro.id_livro,
-          usuarioId: usuario?.id,
+        this.emprestimoService.realizarEmprestimo({
+          idLivro: this.livro.id_livro,
+          id: usuario.id,
+        }).subscribe({
+          next: () => {
+            this.toastr.success('Empréstimo realizado!');
+            this.livro.status = 'emprestado';
+            this.adicionarNaEstante('emprestado');
+          },
+          error: (err) => {
+            console.error(err);
+            alert(`Erro ${err.status}: ${err.message}`);
+          },
         });
-
-        this.emprestimoService
-          .realizarEmprestimo({
-            idLivro: this.livro.id_livro,
-            id: usuario?.id,
-          })
-          .subscribe({
-            next: () => {
-              alert('Empréstimo realizado!');
-              this.livro.status = 'emprestado';
-              const tipo = 'emprestado';
-
-              this.estanteService
-                .adicionarLivro(usuario.id, this.livro.id_livro,tipo)
-                .subscribe({
-                  next: (res) => {
-                    console.log('Tipo enviado:', tipo);
-
-                    console.log(`Livro adicionado à estante "${tipo}" com sucesso.`, res);
-
-                  },
-                  error: (err) => {
-                    console.log('Tipo enviado:', tipo);
-
-                    console.error(`❌ Erro ao adicionar à estante "${tipo}":`, err);
-                  }
-                });
-            },
-            error: (error) => {
-              console.error('ERRO COMPLETO:', error);
-              alert(`Erro ${error.status}: ${error.message || 'Erro no empréstimo'}`);
-            },
-          });
       },
-      error: () => {
-        alert('Erro ao carregar dados do usuário.');
-      },
+      error: () => alert('Erro ao buscar usuário.'),
     });
   }
 }

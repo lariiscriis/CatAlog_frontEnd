@@ -1,8 +1,10 @@
-<app-header></app-header>
+
 <div class="dashboard-container">
   <app-sidebar></app-sidebar>
 
   <div class="main-content">
+    <app-header></app-header>
+
     <h2>Histórico de Empréstimos</h2>
 
     <ng-container *ngIf="estantes.length > 0; else nenhumHistorico">

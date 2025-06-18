@@ -35,22 +35,28 @@
         </div>
       </div>
     </div>
-
     <!-- Aba de Comentários -->
     <div class="comments-section">
       <h2>Notas Recentes</h2>
-
-      <div class="comment-card" *ngFor="let comment of comments">
-        <div class="book-info">
-          <img [src]="comment.bookCover" class="comment-book-cover">
-          <div>
-            <h3>{{ comment.bookTitle }}</h3>
-            <p>Página {{ comment.page }} • {{ comment.date | date }}</p>
-          </div>
-        </div>
-        <p class="comment-text">{{ comment.text }}</p>
+<div *ngIf="anotacoes.length > 0; else nenhumaAnotacao">
+  <div class="comment-card" *ngFor="let anotacao of anotacoes">
+    <div class="book-info">
+      <img [src]="anotacao.livro?.capa" class="comment-book-cover" alt="Capa do livro">
+      <div>
+        <h3>{{ anotacao.livro?.titulo || 'Título não disponível' }}</h3>
+        <p>Página {{ anotacao.pagina }} • {{ anotacao.dataNota | date:'shortDate' }}</p>
       </div>
     </div>
+    <p class="comment-text">{{ anotacao.nota }}</p>
+    <p class="comment-rating">Avaliação: {{ anotacao.avaliacao }}/5</p>
+  </div>
+</div>
+</div>
+
+<ng-template #nenhumaAnotacao>
+  <p>Nenhuma anotação encontrada.</p>
+</ng-template>
+
 
     <!-- Modal de Edição -->
     <div class="modal" *ngIf="showEditModal">

@@ -5,6 +5,10 @@ import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { UsuarioService } from '../../services/usuario.service';
 import { HttpClient } from '@angular/common/http';
+import { AnotacaoService } from '../../services/anotacao.service';
+import { Anotacao } from '../../types/anotacao.type';
+import { BookService } from '../../services/book.service';
+
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -22,6 +26,7 @@ export class PerfilUsuarioComponent implements OnInit {
   user: any = null;           // dados do usuário logado
   editUser: any = {};         // objeto para edição
   showEditModal = false;      // controle do modal
+anotacoes: Anotacao[] = [];
 
   comments = [
     {
@@ -40,33 +45,78 @@ export class PerfilUsuarioComponent implements OnInit {
     }
   ];
 
-  constructor(
-    private usuarioService: UsuarioService,
-    private http: HttpClient
-  ) {}
+constructor(
+  private usuarioService: UsuarioService,
+  private anotacaoService: AnotacaoService,
+  private bookService: BookService,
+  private http: HttpClient
+) {}
+
+
 
   ngOnInit(): void {
     this.carregarUsuarioLogado();
   }
 
-  carregarUsuarioLogado(): void {
-    this.usuarioService.getUsuarioLogado().subscribe({
-      next: (usuario) => {
-        if (usuario) {
-          console.log('Usuário carregado com sucesso:', usuario);
-          this.user = usuario;
-          this.editUser = { ...usuario };
-        } else {
-          console.warn('Nenhum usuário retornado.');
-          alert('Usuário não encontrado. Verifique se está logado.');
-        }
-      },
-      error: (err) => {
-        console.error('Erro ao buscar usuário logado:', err);
-        alert('Erro ao carregar dados do usuário logado.');
+carregarUsuarioLogado(): void {
+  this.usuarioService.getUsuarioLogado().subscribe({
+    next: (usuario) => {
+      if (usuario) {
+        console.log('Usuário carregado com sucesso:', usuario);
+        this.user = usuario;
+        this.editUser = { ...usuario };
+        this.carregarAnotacoes(usuario.id); // 👈 Aqui!
+      } else {
+        console.warn('Nenhum usuário retornado.');
+        alert('Usuário não encontrado. Verifique se está logado.');
       }
-    });
-  }
+    },
+    error: (err) => {
+      console.error('Erro ao buscar usuário logado:', err);
+      alert('Erro ao carregar dados do usuário logado.');
+    }
+  });
+}
+
+carregarAnotacoes(idUsuario: string): void {
+  this.anotacaoService.listarPorUsuario(idUsuario).subscribe({
+    next: (anotacoes) => {
+      const anotacoesComLivro: Anotacao[] = [];
+
+      anotacoes.forEach((anotacao) => {
+        this.bookService.buscarPorId(anotacao.idLivro).subscribe({
+          next: (livro) => {
+            anotacoesComLivro.push({
+              ...anotacao,
+              livro: {
+                titulo: livro.titulo,
+                capa: livro.capa
+              }
+            });
+
+            // Quando todas forem carregadas, atualiza a lista
+            if (anotacoesComLivro.length === anotacoes.length) {
+              this.anotacoes = anotacoesComLivro;
+            }
+          },
+          error: (err) => {
+            console.warn(`Erro ao buscar livro ${anotacao.idLivro}:`, err);
+            // Adiciona anotação mesmo sem o livro, se quiser
+            anotacoesComLivro.push(anotacao);
+            if (anotacoesComLivro.length === anotacoes.length) {
+              this.anotacoes = anotacoesComLivro;
+            }
+          }
+        });
+      });
+    },
+    error: (err) => {
+      console.error('Erro ao carregar anotações:', err);
+      alert('Erro ao buscar anotações do usuário.');
+    }
+  });
+}
+
 
   openEditModal(): void {
     if (this.user) {

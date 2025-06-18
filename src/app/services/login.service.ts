@@ -28,11 +28,11 @@ apiUrl = "http://localhost:8080/auth"
   login(email: String, password: String): Observable<any> {
     return this.httClient.post<LoginResponse>(this.apiUrl + "/login", {email, password})
       .pipe(tap((value)=> {
-      sessionStorage.setItem("auth-token", value.token);
-      sessionStorage.setItem("username", value.name);
+          localStorage.setItem("auth-token", value.token);
+          localStorage.setItem("username", value.name);
     }),
         switchMap(() => {
-          const token = sessionStorage.getItem("auth-token");
+          const token = localStorage.getItem("auth-token");
           return this.usuarioService.fetchUsuario(token!);
         })
         )
@@ -41,8 +41,8 @@ apiUrl = "http://localhost:8080/auth"
   signup(name: string, email: string, password: string){
     return this.httClient.post<LoginResponse>(this.apiUrl + "/register", {name, email, password})
       .pipe(tap((value)=> {
-      sessionStorage.setItem("auth-token", value.token);
-      sessionStorage.setItem("username ", value.name);
+        localStorage.setItem("auth-token", value.token);
+        localStorage.setItem("username", value.name);
 
     }))
   }

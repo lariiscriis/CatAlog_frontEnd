@@ -9,6 +9,7 @@ import {BookService} from '../services/book.service';
 import {EmprestimoService} from '../services/emprestimo.service';
 import {UsuarioService} from '../services/usuario.service';
 import { HttpHeaders } from '@angular/common/http';
+import {EstanteService} from '../services/estante.service';
 
 @Component({
   standalone: true,
@@ -38,8 +39,10 @@ export class LivroDetalhesComponent implements OnInit {
     private route: ActivatedRoute,
     private bookService: BookService,
     private emprestimoService: EmprestimoService,
-    private usuarioService: UsuarioService
-  ) {}
+    private usuarioService: UsuarioService,
+    private estanteService: EstanteService
+
+) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -70,8 +73,7 @@ export class LivroDetalhesComponent implements OnInit {
     return {
       ...data,
       id_livro: data?.idLivro,
-      data_devolucao: data.dataDevolucao, // ajuste conforme sua API
-      // mapeie outros campos se precisar
+      data_devolucao: data.dataDevolucao,
     };
   }
 
@@ -174,6 +176,23 @@ export class LivroDetalhesComponent implements OnInit {
             next: () => {
               alert('Empréstimo realizado!');
               this.livro.status = 'emprestado';
+              const tipo = 'emprestado';
+
+              this.estanteService
+                .adicionarLivro(usuario.id, this.livro.id_livro,tipo)
+                .subscribe({
+                  next: (res) => {
+                    console.log('Tipo enviado:', tipo);
+
+                    console.log(`Livro adicionado à estante "${tipo}" com sucesso.`, res);
+
+                  },
+                  error: (err) => {
+                    console.log('Tipo enviado:', tipo);
+
+                    console.error(`❌ Erro ao adicionar à estante "${tipo}":`, err);
+                  }
+                });
             },
             error: (error) => {
               console.error('ERRO COMPLETO:', error);

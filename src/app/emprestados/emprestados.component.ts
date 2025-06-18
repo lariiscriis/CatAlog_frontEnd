@@ -5,6 +5,7 @@ import {SidebarComponent} from '../components/sidebar/sidebar.component';
 import {HeaderComponent} from '../components/header/header.component';
 import {EstanteService} from '../services/estante.service';
 import {Livro} from '../types/livro.type';
+import { UsuarioService } from '../services/usuario.service';
 
 
 interface Shelf {
@@ -22,17 +23,25 @@ export class EmprestadosComponent {
   shelves: Shelf[] = [];
   usuarioId = 'ed94a5a8-1d2d-409f-806e-4827f60fd4ff';
 
-  user = {
-    name: 'Usuário teste',
-    photo: 'https://marketplace.canva.com/A5alg/MAESXCA5alg/1/tl/canva-user-icon-MAESXCA5alg.png'
-  };
 
-  constructor(private estanteService: EstanteService) {}
+  constructor(private estanteService: EstanteService,   private usuarioService: UsuarioService
+  ) {}
 
-  ngOnInit(): void {
-    this.carregarLivrosFavoritos();
-  }
-
+      ngOnInit(): void {
+        this.usuarioService.getUsuarioLogado().subscribe({
+          next: (usuario) => {
+            const id = usuario?.id;
+            if (id) {
+              this.carregarLivrosEmprestados(id);
+            } else {
+              console.error('ID do usuário não encontrado.');
+            }
+          },
+          error: (err) => {
+            console.error('Erro ao carregar usuário logado:', err);
+          }
+        });
+      }
   carregarLivrosFavoritos(): void {
     this.estanteService.listarLivros(this.usuarioId, 'emprestado')
       .subscribe({
@@ -44,6 +53,17 @@ export class EmprestadosComponent {
         error: (err) => console.error('Erro ao carregar emprestado:', err)
       });
   }
+
+    carregarLivrosEmprestados(usuarioId: string): void {
+      this.estanteService.listarLivros(usuarioId, 'emprestado')
+        .subscribe({
+          next: (livros) => {
+            console.log('Dados recebidos da API:', livros);
+            this.shelves = this.organizarEmEstantes(livros);
+          },
+          error: (err) => console.error('Erro ao carregar emprestado:', err)
+        });
+    }
 
   organizarEmEstantes(livros: Livro[]): Shelf[] {
     const shelves: Shelf[] = [];

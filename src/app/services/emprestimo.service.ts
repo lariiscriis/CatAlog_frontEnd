@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {map, Observable, tap} from 'rxjs';
+import {Livro} from '../types/livro.type';
 
 @Injectable({
   providedIn: 'root'
@@ -47,4 +48,10 @@ export class EmprestimoService {
     });
     return this.http.put(`${this.apiUrl}/renovar/${idEmprestimo}`, {}, { headers });
   }
+
+    buscarEmprestimosDoUsuario(idUsuario: string): Observable<Livro[]> {
+      return this.http.get<Livro[]>(`http://localhost:8080/emprestimos/ativos/${idUsuario}`);
+    }
+
+
 }

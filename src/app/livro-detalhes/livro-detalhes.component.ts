@@ -6,6 +6,9 @@ import {FormsModule} from '@angular/forms';
 import {Livro, LivroEstante} from '../types/livro.type';
 import {DatePipe, CommonModule} from '@angular/common';
 import {BookService} from '../services/book.service';
+import {EmprestimoService} from '../services/emprestimo.service';
+import {UsuarioService} from '../services/usuario.service';
+import { HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -18,7 +21,8 @@ import {BookService} from '../services/book.service';
     SidebarComponent,
     FormsModule,
     DatePipe,
-    CommonModule
+    CommonModule,
+
   ],
 
 })
@@ -34,7 +38,8 @@ export class LivroDetalhesComponent implements OnInit {
   showMultaModal: boolean = false;
 
 
-  constructor(private route: ActivatedRoute, private bookService: BookService) {}
+  constructor(private route: ActivatedRoute, private bookService: BookService,
+              private emprestimoService: EmprestimoService, private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -123,15 +128,49 @@ export class LivroDetalhesComponent implements OnInit {
   }
 
   confirmarEmprestimo(): void {
+
     this.showEmprestimoModal = false;
     // lógica real de empréstimo
     this.solicitarEmprestimo();
   }
-
   solicitarEmprestimo(): void {
-    // Lógica para solicitar empréstimo
-    alert('Empréstimo solicitado com sucesso!');
-    // Atualize o status do livro
-    // this.livro.status = 'emprestado';
+    // Verificação EXTRA do token
+    const token = sessionStorage.getItem('auth-token');
+    console.log('Token no sessionStorage:', token);
+
+    if (!token) {
+      alert('Token não encontrado! Faça login novamente.');
+      return;
+    }
+
+    // Verificação EXTRA do usuário
+    const usuario = this.usuarioService.getUsuarioAtual();
+    console.log('Usuário no serviço:', usuario);
+
+    if (!usuario) {
+      alert('Dados do usuário não carregados!');
+      return;
+    }
+
+    // Mostra os dados que serão enviados
+    console.log('Dados do empréstimo:', {
+      livroId: this.livro.id_livro,
+      usuarioId: usuario.id
+    });
+
+    // Chamada SIMPLIFICADA ao serviço
+    this.emprestimoService.realizarEmprestimo({
+      livroId: this.livro.id_livro,
+      usuarioId: usuario.id
+    }).subscribe({
+      next: () => {
+        alert('Empréstimo realizado!');
+        this.livro.status = 'emprestado';
+      },
+      error: (error) => {
+        console.error('ERRO COMPLETO:', error);
+        alert(`Erro ${error.status}: ${error.message || 'Erro no empréstimo'}`);
+      }
+    });
   }
 }

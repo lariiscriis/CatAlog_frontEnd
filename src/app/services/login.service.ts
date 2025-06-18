@@ -29,7 +29,7 @@ apiUrl = "http://localhost:8080/auth"
     return this.httClient.post<LoginResponse>(this.apiUrl + "/login", {email, password})
       .pipe(tap((value)=> {
       sessionStorage.setItem("auth-token", value.token);
-      sessionStorage.setItem("username ", value.name);
+      sessionStorage.setItem("username", value.name);
     }),
         switchMap(() => {
           const token = sessionStorage.getItem("auth-token");

@@ -34,6 +34,10 @@ export class UsuarioService {
     );
   }
 
+  getUsuarioAtual(): Usuario | null {
+    return this.usuarioSubject.getValue();
+  }
+
   //chamar quando for fazer logout pra limpar os dados
   clearUsuario(){
     this.usuarioSubject.next(null);

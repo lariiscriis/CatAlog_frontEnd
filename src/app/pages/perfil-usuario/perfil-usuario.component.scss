@@ -9,6 +9,7 @@
   margin: 0 auto;
   flex: 2;
   padding: 20px;
+  
 }
 
 .profile-header {
@@ -27,6 +28,7 @@
       height: 100%;
       width: 100%;
       border-radius: 10px;
+      object-fit: cover;
     }
   }
 
@@ -61,7 +63,7 @@
       top: 20px;
       left: 10px;
       transform:  scale(0.9);
-
+      object-fit: cover;
     }
   }
 

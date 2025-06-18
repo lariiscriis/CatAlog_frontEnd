@@ -10,7 +10,6 @@ import {EmprestimoService} from '../services/emprestimo.service';
 import {UsuarioService} from '../services/usuario.service';
 import { HttpHeaders } from '@angular/common/http';
 
-
 @Component({
   standalone: true,
   selector: 'app-livro-detalhes',
@@ -22,9 +21,7 @@ import { HttpHeaders } from '@angular/common/http';
     FormsModule,
     DatePipe,
     CommonModule,
-
   ],
-
 })
 export class LivroDetalhesComponent implements OnInit {
   livro!: LivroEstante;
@@ -37,45 +34,54 @@ export class LivroDetalhesComponent implements OnInit {
   showEmprestimoModal: boolean = false;
   showMultaModal: boolean = false;
 
-
-  constructor(private route: ActivatedRoute, private bookService: BookService,
-              private emprestimoService: EmprestimoService, private usuarioService: UsuarioService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private bookService: BookService,
+    private emprestimoService: EmprestimoService,
+    private usuarioService: UsuarioService
+  ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-
     const estanteParam = this.route.snapshot.queryParamMap.get('estante');
 
     const estantesValidas = ['favorito', 'desejado', 'emprestado'] as const;
-
     this.estante = estantesValidas.includes(estanteParam as any)
-      ? estanteParam as 'favorito' | 'desejado' | 'emprestado'
+      ? (estanteParam as 'favorito' | 'desejado' | 'emprestado')
       : 'favorito';
 
     if (id) {
       this.bookService.buscarPorId(id).subscribe({
         next: (data) => {
-          console.log('Dados recebidos:', data);
-          this.livro = {
-            ...data,
-            status: this.estante
-          };
+          this.livro = this.mapLivroApiToLivroEstante(data);
+          this.livro.status = this.estante;
           this.calcularDiasRestantes();
         },
         error: (err) => {
           console.error('Erro ao buscar livro:', err);
-        }
+        },
       });
     }
     this.calcularDiasRestantes();
   }
 
+  // Método privado para mapear o objeto da API para o formato esperado
+  private mapLivroApiToLivroEstante(data: any): LivroEstante {
+    return {
+      ...data,
+      id_livro: data?.idLivro,
+      data_devolucao: data.dataDevolucao, // ajuste conforme sua API
+      // mapeie outros campos se precisar
+    };
+  }
 
   calcularDiasRestantes(): void {
-    if (this.livro.data_devolucao) {
+    if (this.livro?.data_devolucao) {
       const hoje = new Date();
       const devolucao = new Date(this.livro.data_devolucao);
-      this.diasRestantes = Math.ceil((devolucao.getTime() - hoje.getTime()) / (1000 * 3600 * 24));
+      this.diasRestantes = Math.ceil(
+        (devolucao.getTime() - hoje.getTime()) / (1000 * 3600 * 24)
+      );
     }
   }
 
@@ -85,7 +91,7 @@ export class LivroDetalhesComponent implements OnInit {
       this.livro.notas.unshift({
         texto: this.novaNota,
         data: new Date(),
-        pagina: this.paginaNota
+        pagina: this.paginaNota,
       });
       this.novaNota = '';
       this.paginaNota = 1;
@@ -94,17 +100,15 @@ export class LivroDetalhesComponent implements OnInit {
 
   rateBook(rating: number): void {
     this.currentRating = rating;
-    // logica para salvar a avaliação
+    // lógica para salvar a avaliação
   }
 
   devolverLivro(): void {
-    // Lógica para devolver o livro
     alert('Livro devolvido com sucesso!');
   }
 
   calcularMulta(): number {
     const diasAtraso = -this.diasRestantes;
-    // Exemplo: R$ 2,00 por dia de atraso
     return diasAtraso * 2;
   }
 
@@ -114,8 +118,7 @@ export class LivroDetalhesComponent implements OnInit {
 
   confirmarDevolucaoComMulta(): void {
     this.showMultaModal = false;
-    // Lógica para registrar o pagamento da multa
-    alert("Multa de R$ ${this.calcularMulta().toFixed(2)} paga com sucesso!");
+    alert(`Multa de R$ ${this.calcularMulta().toFixed(2)} paga com sucesso!`);
     this.devolverLivro();
   }
 
@@ -128,13 +131,11 @@ export class LivroDetalhesComponent implements OnInit {
   }
 
   confirmarEmprestimo(): void {
-
     this.showEmprestimoModal = false;
-    // lógica real de empréstimo
     this.solicitarEmprestimo();
   }
+
   solicitarEmprestimo(): void {
-    // Verificação EXTRA do token
     const token = sessionStorage.getItem('auth-token');
     console.log('Token no sessionStorage:', token);
 
@@ -143,34 +144,46 @@ export class LivroDetalhesComponent implements OnInit {
       return;
     }
 
-    // Verificação EXTRA do usuário
-    const usuario = this.usuarioService.getUsuarioAtual();
-    console.log('Usuário no serviço:', usuario);
-
-    if (!usuario) {
-      alert('Dados do usuário não carregados!');
+    if (!this.livro?.id_livro) {
+      alert('ID do livro inválido. Aguarde o carregamento do livro.');
       return;
     }
 
-    // Mostra os dados que serão enviados
-    console.log('Dados do empréstimo:', {
-      livroId: this.livro.id_livro,
-      usuarioId: usuario.id
-    });
 
-    // Chamada SIMPLIFICADA ao serviço
-    this.emprestimoService.realizarEmprestimo({
-      livroId: this.livro.id_livro,
-      usuarioId: usuario.id
-    }).subscribe({
-      next: () => {
-        alert('Empréstimo realizado!');
-        this.livro.status = 'emprestado';
+    console.log('ID do livro:', this.livro.id_livro);
+
+    this.usuarioService.getUsuarioLogado().subscribe({
+      next: (usuario) => {
+        if (!usuario?.id) {
+          alert('ID do usuário não encontrado. Faça login novamente.');
+          return;
+        }
+
+        console.log('Usuário no serviço:', usuario);
+        console.log('Dados do empréstimo:', {
+          livroId: this.livro.id_livro,
+          usuarioId: usuario?.id,
+        });
+
+        this.emprestimoService
+          .realizarEmprestimo({
+            idLivro: this.livro.id_livro,
+            id: usuario?.id,
+          })
+          .subscribe({
+            next: () => {
+              alert('Empréstimo realizado!');
+              this.livro.status = 'emprestado';
+            },
+            error: (error) => {
+              console.error('ERRO COMPLETO:', error);
+              alert(`Erro ${error.status}: ${error.message || 'Erro no empréstimo'}`);
+            },
+          });
       },
-      error: (error) => {
-        console.error('ERRO COMPLETO:', error);
-        alert(`Erro ${error.status}: ${error.message || 'Erro no empréstimo'}`);
-      }
+      error: () => {
+        alert('Erro ao carregar dados do usuário.');
+      },
     });
   }
 }

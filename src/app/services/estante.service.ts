@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import { Livro } from '../types/livro.type';
 
@@ -11,15 +11,20 @@ export class EstanteService {
 
   constructor(private http: HttpClient) { }
 
-  adicionarLivro(usuarioId: string, livroId: string, tipo: 'favorito' | 'desejado' | 'emprestado'): Observable<any> {
-    return this.http.post(`${this.apiUrl}`, null, {
-      params: {
-        usuarioId,
-        livroId,
-        tipo
-      }
+  adicionarLivro(usuarioId: string, livroId: string, tipo: string) {
+    const params = new HttpParams()
+      .set('idUsuario', usuarioId)
+      .set('idLivro', livroId)
+      .set('tipoRelacao', tipo);
+
+    const token = sessionStorage.getItem('auth-token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
     });
+
+    return this.http.post(`${this.apiUrl}/adicionar`, null, { params, headers });
   }
+
 
   listarLivros(usuarioId: string, tipo: string): Observable<Livro[]> {
     return this.http.get<any[]>(`${this.apiUrl}/${usuarioId}/${tipo}`).pipe(

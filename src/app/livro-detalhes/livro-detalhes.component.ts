@@ -12,6 +12,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { AnotacaoService } from '../services/anotacao.service';
 import { Anotacao } from '../types/anotacao.type';
 
+import {EstanteService} from '../services/estante.service';
 
 @Component({
   standalone: true,
@@ -43,9 +44,10 @@ export class LivroDetalhesComponent implements OnInit {
     private bookService: BookService,
     private emprestimoService: EmprestimoService,
     private usuarioService: UsuarioService,
-    private anotacaoService: AnotacaoService
+    private anotacaoService: AnotacaoService,
+    private estanteService: EstanteService
 
-  ) {}
+) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -86,8 +88,7 @@ export class LivroDetalhesComponent implements OnInit {
     return {
       ...data,
       id_livro: data?.idLivro,
-      data_devolucao: data.dataDevolucao, // ajuste conforme sua API
-      // mapeie outros campos se precisar
+      data_devolucao: data.dataDevolucao,
     };
   }
 
@@ -203,6 +204,23 @@ adicionarNota(): void {
             next: () => {
               alert('Empréstimo realizado!');
               this.livro.status = 'emprestado';
+              const tipo = 'emprestado';
+
+              this.estanteService
+                .adicionarLivro(usuario.id, this.livro.id_livro,tipo)
+                .subscribe({
+                  next: (res) => {
+                    console.log('Tipo enviado:', tipo);
+
+                    console.log(`Livro adicionado à estante "${tipo}" com sucesso.`, res);
+
+                  },
+                  error: (err) => {
+                    console.log('Tipo enviado:', tipo);
+
+                    console.error(`❌ Erro ao adicionar à estante "${tipo}":`, err);
+                  }
+                });
             },
             error: (error) => {
               console.error('ERRO COMPLETO:', error);

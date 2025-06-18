@@ -3,6 +3,7 @@ import {UsuarioService} from '../../services/usuario.service';
 import {Observable} from 'rxjs';
 import {Usuario} from '../../types/usuario.type';
 import {AsyncPipe} from '@angular/common';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -15,17 +16,20 @@ import {AsyncPipe} from '@angular/common';
 
 })
 export class HeaderComponent {
-     usuario$!: Observable<Usuario | null>;
-
-  constructor(private usuarioService: UsuarioService) {
+  usuario$?: Observable<Usuario | null>;
+  constructor(private usuarioService: UsuarioService, private router: Router) {
   }
 
   ngOnInit(): void {
     this.usuario$ = this.usuarioService.usuario$;
+    this.usuario$.subscribe(user => {
+      console.log('Usuario foto_perfil:', user?.fotoPerfil);
+    });
   }
 
 
   logout() {
-    console.log('Logout!');
+    this.usuarioService.clearUsuario();
+    this.router.navigate(['/login']);
   }
 }

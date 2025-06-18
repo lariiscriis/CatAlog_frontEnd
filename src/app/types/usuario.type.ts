@@ -4,6 +4,6 @@ export interface Usuario {
   email: string;
   password: string;
   bio: string;
-  foto_perfil: string;
-  foto_background: string;
+  fotoPerfil: string;
+  fotoBackground: string;
 }

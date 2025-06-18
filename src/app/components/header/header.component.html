@@ -9,7 +9,7 @@
       <i class="bi bi-bell"></i>
     </button>
     <div class="user-profile">
-      <img [src]="(usuario$ | async)?.foto_perfil || 'https://marketplace.canva.com/A5alg/MAESXCA5alg/1/tl/canva-user-icon-MAESXCA5alg.png'" alt="Perfil">
+      <img [src]="(usuario$ | async)?.fotoPerfil || 'https://...default-image.png'" alt="Perfil">
       <span>{{ (usuario$ | async)?.name }}</span>
     </div>
     <button class="logout-btn" (click)="logout()">

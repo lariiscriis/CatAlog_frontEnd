@@ -1,59 +1,121 @@
-# CatALog
+# 📚 CatALog  - Sistema de Gerenciamento de Biblioteca - Repositório Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.0.
+A interface foi projetada para ser moderna, intuitiva e responsiva, permitindo que os usuários acessem facilmente funcionalidades como empréstimos e devoluções de livros, anotações por página, avaliações e uma estante virtual personalizada com categorias como Favoritos, Desejados e Emprestados.
+Este projeto foi proposto em aula como exercício prático para consolidar os conhecimentos adquiridos durante o semestre, especialmente no uso de Java com Spring Boot, além de reforçar a prática de persistência e consultas com JDBC e integração com APIs RESTful.
+Claro! Aqui está uma sugestão de trecho chamativo para colocar no `README.md` do **frontend**, com destaque visual e link direto para o repositório do **backend**:
 
-## Development server
+<br>
 
-To start a local development server, run:
+## 🧠 Integração com Backend
 
-```bash
-ng serve
-```
+Este projeto se conecta diretamente ao backend construído com **Spring Boot + MySQL**, responsável por gerenciar toda a lógica de negócio, autenticação, persistência de dados e regras de empréstimo.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+> 🔗 **Confira o repositório do backend aqui:**
+> 👉 [📦 CatALog - Backend (Spring Boot)](https://github.com/lariiscriis/CatAlog_backEnd)
 
-## Code scaffolding
+<br>
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 📡 Integração com API do Google Books
 
-```bash
-ng generate component component-name
-```
+O sistema consome dados diretamente da **API do Google Books**, permitindo aos usuários buscar livros usando palavras-chave como título, autor ou ISBN.
+As informações retornadas (como título, capa, autor, categoria e descrição) são **salvas no banco de dados via backend** em Spring Boot, garantindo performance nas consultas futuras e evitando requisições repetidas à API.
+Essa funcionalidade amplia o catálogo da biblioteca com facilidade, aproveitando uma base de dados rica e constantemente atualizada.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+<br>
 
-```bash
-ng generate --help
-```
+## 🌐 Funcionalidades
 
-## Building
+- 🏠 Página inicial com destaques e navegação intuitiva
+- 🔍 Busca de livros
+- 📖 Visualização de detalhes do livro
+- 🧾 Anotações por página e avaliações
+- 📚 Estante do usuário:
+  - Marcar livros como **Favorito**, **Desejado** ou **Emprestado**
+- 📆 Empréstimos:
+  - Realizar empréstimo
+  - Devolver livros (com ou sem multa)
+  - Modal de confirmação
+- 🔔 Modais e mensagens de feedback com `ngx-toastr`
 
-To build the project run:
+- 👤 **Perfil de Usuário**
+  - Visualizar histórico, livros lidos e anotações
+  - Upload de imagem de perfil
 
-```bash
-ng build
-```
+- 📊 **Dashboard administrativa**
+  - Controles de livros
+  - Controle de emprestimo
+    
+<br>
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🔮 Funcionalidades Futuras
 
-## Running unit tests
+### 🔔 Sistema de notificações:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- Devolução próxima
 
-```bash
-ng test
-```
+- Livro desejado disponível
 
-## Running end-to-end tests
+- Multa pendente
 
-For end-to-end (e2e) testing, run:
+- Confirmação de devolução
 
-```bash
-ng e2e
-```
+### 📩 Envio de email para alertas
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### 📊 Dashboard para admins com gráficos e estatísticas
 
-## Additional Resources
+<br>
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 🔧 Tecnologias Utilizadas
+
+- **Angular 17+**
+- **Angular Material** e componentes customizados
+- **RxJS** para reatividade
+- **SCSS** para estilos modulares
+- **ngx-toastr** para notificações
+- Integração com backend REST em Spring Boot
+
+
+<br>
+## ▶️ Como Rodar o Projeto
+
+Siga os passos abaixo para rodar o frontend localmente:
+
+### 🔧 Pré-requisitos
+
+* Node.js (versão 18+ recomendada)
+* Angular CLI instalado globalmente:
+
+  ```bash
+  npm install -g @angular/cli
+  ```
+
+### 🚀 Passo a passo
+
+1. Clone o repositório:
+
+   ```bash
+   git clone https://github.com/lariiscriis/CatAlog_frontEnd.git
+
+   ```
+
+2. Instale as dependências:
+
+   ```bash
+   npm install
+   ```
+
+3. Inicie o servidor de desenvolvimento:
+
+   ```bash
+   ng serve
+   ```
+
+4. Acesse a aplicação:
+
+   ```
+   http://localhost:4200
+   ```
+<br>
+
+> 💡 **Importante:** certifique-se de que o backend (*Spring Boot*) esteja rodando em `http://localhost:8080` ou altere a URL nas configurações de serviços Angular se necessário.
+

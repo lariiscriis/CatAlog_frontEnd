@@ -2,7 +2,6 @@
 
 A interface foi projetada para ser moderna, intuitiva e responsiva, permitindo que os usuários acessem facilmente funcionalidades como empréstimos e devoluções de livros, anotações por página, avaliações e uma estante virtual personalizada com categorias como Favoritos, Desejados e Emprestados.
 Este projeto foi proposto em aula como exercício prático para consolidar os conhecimentos adquiridos durante o semestre, especialmente no uso de Java com Spring Boot, além de reforçar a prática de persistência e consultas com JDBC e integração com APIs RESTful.
-Claro! Aqui está uma sugestão de trecho chamativo para colocar no `README.md` do **frontend**, com destaque visual e link direto para o repositório do **backend**:
 
 <br>
 

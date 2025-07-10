@@ -85,7 +85,7 @@ private carregarAnotacoes(): void {
         next: (notas) => {
           this.anotacoes = notas;
         },
-        error: () => this.toastr.error('Erro ao carregar anotações')
+        error: () => console.error('Erro ao carregar anotações')
       });
     }
   });
@@ -178,6 +178,8 @@ private carregarAnotacoes(): void {
       this.emprestimoService.buscarEmprestimosAtivos(usuario.id).subscribe({
         next: (emprestimos) => {
           const emprestimo = emprestimos.find(e => (e.livro?.id_livro || e?.idLivro) === this.livro.id_livro);
+          console.log('Empréstimos encontrados:', emprestimos);
+          console.log('Empréstimo atual:', emprestimo?.idEmprestimo);
           if (emprestimo?.idEmprestimo) {
             this.emprestimoService.devolverEmprestimo(emprestimo.idEmprestimo).subscribe({
               next: () => {

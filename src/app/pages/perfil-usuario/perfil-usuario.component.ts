@@ -112,7 +112,6 @@ carregarAnotacoes(idUsuario: string): void {
     },
     error: (err) => {
       console.error('Erro ao carregar anotações:', err);
-      alert('Erro ao buscar anotações do usuário.');
     }
   });
 }

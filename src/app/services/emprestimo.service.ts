@@ -52,7 +52,11 @@ export class EmprestimoService {
   }
 
 devolverEmprestimo(idEmprestimo: number): Observable<Emprestimo> {
-    return this.http.put<Emprestimo>(`${this.apiUrl}/devolver/${idEmprestimo}`, {});
+    const token = localStorage.getItem('auth-token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.put<Emprestimo>(`${this.apiUrl}/devolver/${idEmprestimo}`, {}, { headers });
   }
 
   renovarEmprestimo(idEmprestimo: number): Observable<any> {

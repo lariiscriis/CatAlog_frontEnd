@@ -49,7 +49,12 @@ export class AdminComponent implements OnInit {
 
   carregarLivros(): void {
     this.bookService.listarTodos().subscribe(livros => {
-      this.livros = livros;
+      this.livros = livros.map(livro => {
+        if (!livro.id_livro && livro.idLivro) {
+          livro.id_livro = livro.idLivro;
+        }
+        return livro;
+      });
     });
   }
 
@@ -88,7 +93,9 @@ export class AdminComponent implements OnInit {
       alert('Título e autores são obrigatórios');
       return;
     }
-
+    if (!livro.id_livro && livro.idLivro) {
+      livro.id_livro = livro.idLivro;
+    }
     this.bookService.atualizarLivro(livro.id_livro, livro).subscribe({
       next: () => {
         alert('Livro atualizado com sucesso');
@@ -100,11 +107,20 @@ export class AdminComponent implements OnInit {
     });
   }
 
-  deletarLivro(id: string): void {
+  deletarLivro(livro: Livro): void {
+
+    const id = !livro.id_livro && livro.idLivro ? livro.idLivro : livro.id_livro;
+
+    if (!id) {
+      console.error('ID do livro não encontrado', livro);
+      return;
+    }
+    console.log(`Tentando excluir livro com ID: ${id}`);
     if (confirm('Tem certeza que deseja excluir este livro?')) {
       this.bookService.deletarLivro(id).subscribe({
         next: () => {
           this.livros = this.livros.filter(l => l.id_livro !== id);
+          alert('Livro excluído com sucesso');
         },
         error: (err) => {
           console.error('Erro ao excluir livro:', err);

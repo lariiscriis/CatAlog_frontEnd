@@ -68,14 +68,15 @@ export class BookService {
     return this.http.post(`${this.apiUrl}?email=${email}`, livro);
   }
 
-  atualizarLivro(idLivro: string, livro: Partial<Livro>): Observable<any> {
+  atualizarLivro(id: string, livro: Partial<Livro>): Observable<any> {
     const email = localStorage.getItem('email') || 'admin@gmail.com';
-    return this.http.put(`${this.apiUrl}/${idLivro}?email=${email}`, livro);
+    return this.http.put(`${this.apiUrl}/${id}?email=${email}`, livro);
   }
 
-  deletarLivro(idLivro: string): Observable<any> {
+  deletarLivro(id: string): Observable<any> {
     const email = localStorage.getItem('email') || 'admin@gmail.com';
-    return this.http.delete(`${this.apiUrl}/${idLivro}?email=${email}`, {
+    console.log(`Deletando livro com ID: ${id} e email: ${email}`);
+    return this.http.delete(`${this.apiUrl}/${id}?email=${email}`, {
       responseType: 'text'
     });
   }

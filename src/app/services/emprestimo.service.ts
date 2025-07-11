@@ -30,6 +30,7 @@ export class EmprestimoService {
   constructor(private http: HttpClient) {}
 
   realizarEmprestimo(emprestimo: any): Observable<any> {
+    console.log('Emprestimo sendo enviado:', emprestimo); // Log do objeto de empréstimo
     const token = localStorage.getItem('auth-token');
     console.log('Token sendo enviado:', token); // Log do token
 

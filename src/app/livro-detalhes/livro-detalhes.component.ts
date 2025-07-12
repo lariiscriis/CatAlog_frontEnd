@@ -32,7 +32,7 @@ export class LivroDetalhesComponent implements OnInit {
   anotacoes: Anotacao[] = [];
   novaNota = '';
   paginaNota = 1;
-  diasRestantes = 0;
+  diasRestantes = 7;
   currentRating = 0;
   activeTab: 'notas' | 'avaliacao' = 'notas';
   showEmprestimoModal = false;
@@ -55,7 +55,7 @@ export class LivroDetalhesComponent implements OnInit {
 
     this.estante = estantesValidas.includes(estanteParam as any)
       ? (estanteParam as typeof this.estante)
-      : 'favorito';
+      : 'desejado';
 
     if (id) {
       this.bookService.buscarPorId(id).subscribe({
@@ -248,6 +248,7 @@ private buscarEmprestimoDoLivro(): void {
           id: usuario.id,
         }).subscribe({
           next: () => {
+            this.calcularDiasRestantes();
             this.toastr.success('Empréstimo realizado!');
             this.livro.status = 'emprestado';
             this.adicionarNaEstante('emprestado');

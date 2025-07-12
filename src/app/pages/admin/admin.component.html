@@ -133,8 +133,9 @@
           </div>
         </div>
         <div class="detalhes-emprestimo">
-<!--          <p><strong>Usuário:</strong> {{ emp.usuario?.name || 'N/A' }}</p>-->
-<!--          <p><strong>Email:</strong> {{ emp.usuario?.email || 'N/A' }}</p>-->
+          <img [src]="emp.usuario?.fotoPerfil" alt="Foto de perfil" width="50" class="profile-avatar">
+         <p><strong>Usuário:</strong> {{ emp.usuario?.name || 'N/A' }}</p>
+         <p><strong>Email:</strong> {{ emp.usuario?.email || 'N/A' }}</p>
           <p><strong>Data Empréstimo:</strong> {{ emp.dataEmprestimo | date:'dd/MM/yyyy' }}</p>
           <p><strong>Devolução Prevista:</strong> {{ emp.dataPrevistaDevolucao | date:'dd/MM/yyyy' }}</p>
           <p *ngIf="emp.dataDevolucao"><strong>Devolvido em:</strong> {{ emp.dataDevolucao | date:'dd/MM/yyyy' }}</p>

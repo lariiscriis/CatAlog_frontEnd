@@ -1,0 +1,22 @@
+<div class="dashboard-container">
+  <app-sidebar></app-sidebar>
+
+  <div class="profile-container">
+    <app-header></app-header>
+
+    <div class="notificacoes-page">
+      <h2>Minhas Notificações</h2>
+
+      <div *ngIf="notificacoes.length > 0; else semNotificacoes">
+        <div class="notificacao" *ngFor="let notif of notificacoes">
+          <p>{{ notif.texto }}</p>
+          <small>{{ notif.dataDevolucao | date:'fullDate' }} às {{ notif.dataDevolucao | date:'shortTime' }}</small>
+        </div>
+      </div>
+
+      <ng-template #semNotificacoes>
+        <p>Você não possui notificações no momento.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>

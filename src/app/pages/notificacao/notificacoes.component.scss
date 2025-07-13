@@ -1,0 +1,28 @@
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.profile-container {
+  max-width: 100%;
+  margin: 0 auto;
+  flex: 2;
+  padding: 20px;
+  
+}
+.notificacoes-page {
+  padding: 2rem;
+
+  .notificacao {
+    background: #f9f9f9;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid #D8BC97;
+    border-radius: 5px;
+  }
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+}

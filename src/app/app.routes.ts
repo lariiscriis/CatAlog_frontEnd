@@ -11,6 +11,7 @@ import {DesejadosComponent} from './desejados/desejados.component';
 import {HistoricoemprestimoComponent} from './historicoemprestimo/historicoemprestimo.component';
 import {LivroDetalhesComponent} from './livro-detalhes/livro-detalhes.component';
 import {AdminComponent} from './pages/admin/admin.component';
+import { NotificacoesComponent } from './pages/notificacao/notificacoes.component';
 
 export const routes: Routes = [
     {
@@ -69,7 +70,10 @@ export const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
+  },
+
+  {
+    path: 'notificacoes',
+    component: NotificacoesComponent,
   }
-
-
 ];

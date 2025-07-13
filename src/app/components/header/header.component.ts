@@ -4,12 +4,13 @@ import {Observable} from 'rxjs';
 import {Usuario} from '../../types/usuario.type';
 import {AsyncPipe} from '@angular/common';
 import {Router} from '@angular/router';
-
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router'; // 👈 Importante!
 
 @Component({
   selector: 'app-header',
-  imports: [
-    AsyncPipe
+  standalone: true,
+  imports: [CommonModule, RouterModule, AsyncPipe
   ],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']

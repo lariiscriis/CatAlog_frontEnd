@@ -29,10 +29,10 @@ a{
       align-items: center;
       padding: 1rem;
       height: 4rem;
-      width: 100%; 
+      width: 100%;
       box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
       z-index: 1;
-      
+
         }
 
     .logo{
@@ -40,7 +40,7 @@ a{
       flex: 1;
       img{
        display: inline-block;
-       width: 150px; 
+       width: 150px;
        height: auto;
       }
      }
@@ -107,7 +107,7 @@ a{
         background-color: #677c69a9;
       }
    }
- 
+
 }
   .section-content {
     background-color: rgba(250, 242, 231, 0.767);
@@ -130,27 +130,28 @@ a{
     margin-bottom: 2rem;
     margin: 1em;
   }
-  
+
   .container-explore {
     display: flex;
     flex-direction: column;
   }
-  
+
   .carousel {
     overflow: hidden;
     width: 100%;
     margin: 0 auto 1em auto;
     padding: 0 2rem;
   }
-  
+
   .carousel-track {
     display: flex;
     gap: 2rem;
     animation: scroll 20s linear infinite;
   }
-  
+
   .book-item {
     flex: 0 0 auto;
+    height: 300px;
     border: 5px solid #1F4040;
     border-radius: 8px;
     padding: 0.5em;
@@ -164,7 +165,7 @@ a{
     box-shadow: rgba(0, 0, 0, 0.2) 0px 18px 50px -10px;
 
   }
-  
+
   .book-inner:hover {
     transform: scale(1.05);
     cursor: pointer;
@@ -175,7 +176,7 @@ a{
     height: 100%;
     border-radius: 4px;
   }
-  
+
   @keyframes scroll {
     0% {
       transform: translateX(0);
@@ -248,11 +249,11 @@ a{
       transform: translateY(-10px) scale(1.03);
       // box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
       opacity: 1;
-      
+
       // &:before {
       //   background: rgba(216, 188, 151, 0.2);
       // }
-      
+
       .card-icon {
         transform: scale(1.1) rotate(-5deg);
         filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
@@ -404,7 +405,7 @@ a{
     color: #1F4040;
     margin-bottom: 3rem;
     position: relative;
-    
+
     &:after {
       content: "";
       position: absolute;
@@ -439,16 +440,16 @@ a{
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background: #1F4040;
     transform: scale(1.1);
   }
-  
+
   &.prev {
     margin-right: 1rem;
   }
-  
+
   &.next {
     margin-left: 1rem;
   }
@@ -471,7 +472,7 @@ a{
   align-items: center;
   position: absolute;
   opacity: 0;
-  
+
   &.active {
     position: relative;
     opacity: 1;
@@ -484,7 +485,7 @@ a{
   border-radius: 50%;
   position: relative;
   // margin-bottom: 1.5rem;
-  
+
   .cat-face-bg {
     position: absolute;
     width: 100%;
@@ -494,9 +495,9 @@ a{
     background-position: center;
     opacity: 0.8;
     z-index: 1;
-    
+
   }
-  
+
   .author-image {
     position: absolute;
     width: 100px;
@@ -518,7 +519,7 @@ a{
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
   max-width: 600px;
   height: 250px;
-  
+
   .comment {
     font-size: 1.1rem;
     line-height: 1.6;
@@ -526,18 +527,18 @@ a{
     font-style: italic;
     margin-bottom: 1.5rem;
   }
-  
+
   .rating {
     color: #F2A679;
     font-size: 1.5rem;
     margin-bottom: 1rem;
   }
-  
+
   .author-name {
     color: #1F4040;
     margin-bottom: 0.5rem;
   }
-  
+
   .author-role {
     color: #677C69;
     font-size: 0.9rem;
@@ -548,7 +549,7 @@ a{
   display: flex;
   justify-content: center;
   margin-top: 2rem;
-  
+
   button {
     width: 12px;
     height: 12px;
@@ -558,7 +559,7 @@ a{
     margin: 0 5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    
+
     &.active {
       background: #1F4040;
       transform: scale(1.2);
@@ -586,24 +587,24 @@ a{
   background-color: #EDDFCC;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-  
+
   h2 {
     color: #1F4040;
     font-size: 2rem;
     margin-bottom: 1.5rem;
     text-align: center;
   }
-  
+
   .contact-paw {
     text-align: center;
     margin: 1.5rem 0;
-    
+
     .paw-icon {
       width: 50%;
       height: 80%;
     }
   }
-  
+
   p {
     color: #40534D;
     line-height: 1.6;
@@ -618,13 +619,13 @@ a{
   flex-direction: row;
   margin-bottom: 1rem;
   justify-content: space-evenly;
-  
+
  .contacts i {
     width: 24px;
     margin-right: 10px;
     color: #40534D;
   }
-  
+
   span {
     color: #1F4040;
     font-size: 0.95rem;
@@ -637,20 +638,20 @@ a{
   background: white;
   border-radius: 15px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-  
+
   .form-group {
     margin-bottom: 1.5rem;
-    
+
     label {
       display: block;
       color: #1F4040;
       margin-bottom: 0.5rem;
       font-weight: 500;
     }
-    
+
     .input-with-cat {
       position: relative;
-      
+
       input {
         width: 100%;
         padding: 12px 40px 12px 15px;
@@ -658,14 +659,14 @@ a{
         border-radius: 8px;
         font-size: 1rem;
         transition: all 0.3s ease;
-        
+
         &:focus {
           border-color: #677C69;
           box-shadow: 0 0 0 3px rgba(103, 124, 105, 0.2);
           outline: none;
         }
       }
-      
+
       .cat-nose {
         position: absolute;
         right: 10px;
@@ -675,7 +676,7 @@ a{
         color: #40534D;
       }
     }
-    
+
     textarea {
       width: 100%;
       height: 120px;
@@ -686,20 +687,20 @@ a{
       resize: vertical;
       transition: all 0.3s ease;
       resize: none;
-      
+
       &:focus {
         border-color: #677C69;
         box-shadow: 0 0 0 3px rgba(103, 124, 105, 0.2);
         outline: none;
       }
     }
-    
+
     .text-counter {
       text-align: right;
       font-size: 0.8rem;
       color: #677C69;
       margin-top: 5px;
-      
+
       .cat-tail {
         margin-left: 5px;
         color: #40534D;
@@ -722,16 +723,16 @@ a{
   justify-content: center;
 
 
-  
+
   &:hover {
     background-color: #1F4040;
     transform: translateY(-2px);
-    
+
     .paw-print {
       transform: translateX(3px);
     }
   }
-  
+
   .paw-print {
     margin-left: 8px;
     transition: all 0.3s ease;
@@ -742,7 +743,7 @@ a{
   background-color: #EDDFCC;
   padding: 2rem 0 0;
   box-shadow: rgba(0, 0, 0, 0.1) 0px -5px 15px;
-  
+
   .container {
     display: flex;
     justify-content: space-between;
@@ -751,16 +752,16 @@ a{
     max-width: 1200px;
     margin: 0 auto;
   }
-  
+
   .logo img {
     width: 150px;
     height: auto;
   }
-  
+
   .footer-links {
     display: flex;
     gap: 2rem;
-    
+
     .footer-item {
       color: #1F4040;
       cursor: pointer;
@@ -769,15 +770,15 @@ a{
       transition: all 0.3s ease;
       text-decoration: none;
       font-size: 0.95rem;
-      
+
       &:hover {
         color: #677C69;
-        
+
         &::before {
           width: 100%;
         }
       }
-      
+
       &::before {
         content: "";
         position: absolute;
@@ -790,17 +791,17 @@ a{
       }
     }
   }
-  
+
   .social-paws {
     display: flex;
     align-items: center;
     gap: 1rem;
-    
+
     span {
       color: #1F4040;
       font-size: 0.9rem;
     }
-    
+
     .social-link {
       font-size: 1.2rem;
       transition: all 0.3s ease;
@@ -810,7 +811,7 @@ a{
       }
     }
   }
-  
+
   .copyright {
     text-align: center;
     padding: 1.5rem;
@@ -828,7 +829,7 @@ a{
   .features-container {
     flex-direction: column;
   }
-  
+
   .video-container {
     width: 100%;
     margin-top: 2rem;
@@ -837,16 +838,16 @@ a{
     .feedback-carousel {
     flex-direction: column;
   }
-  
+
   .nav-arrow {
     margin: 1rem 0 !important;
   }
-  
+
   .feedback-cards-container {
     width: 100%;
     height: auto;
   }
-  
+
   .feedback-card {
     padding: 1rem;
   }
@@ -854,11 +855,11 @@ a{
     .contact-container {
     flex-direction: column;
   }
-  
+
   .cat-footer .container {
     flex-direction: column;
     gap: 1.5rem;
-    
+
     .footer-links {
       flex-direction: column;
       align-items: center;

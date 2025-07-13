@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { AnotacaoService } from '../../services/anotacao.service';
 import { Anotacao } from '../../types/anotacao.type';
 import { BookService } from '../../services/book.service';
-
+import { EmprestimoService } from '../../services/emprestimo.service';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -27,6 +27,7 @@ export class PerfilUsuarioComponent implements OnInit {
   editUser: any = {};         // objeto para edição
   showEditModal = false;      // controle do modal
 anotacoes: Anotacao[] = [];
+totalEmprestimos: number = 0;
 
   comments = [
     {
@@ -49,6 +50,7 @@ constructor(
   private usuarioService: UsuarioService,
   private anotacaoService: AnotacaoService,
   private bookService: BookService,
+  private emprestimoService: EmprestimoService,
   private http: HttpClient
 ) {}
 
@@ -65,6 +67,7 @@ carregarUsuarioLogado(): void {
         console.log('Usuário carregado com sucesso:', usuario);
         this.user = usuario;
         this.editUser = { ...usuario };
+        this.carregarTotalEmprestimos(usuario.id); // 👈 Aqui!
         this.carregarAnotacoes(usuario.id); // 👈 Aqui!
       } else {
         console.warn('Nenhum usuário retornado.');
@@ -74,6 +77,16 @@ carregarUsuarioLogado(): void {
     error: (err) => {
       console.error('Erro ao buscar usuário logado:', err);
       alert('Erro ao carregar dados do usuário logado.');
+    }
+  });
+}
+carregarTotalEmprestimos(idUsuario: string): void {
+  this.emprestimoService.buscarHistoricoDoUsuario(idUsuario).subscribe({
+    next: (emprestimos) => {
+      this.totalEmprestimos = emprestimos.length;
+    },
+    error: (err) => {
+      console.error('Erro ao carregar empréstimos:', err);
     }
   });
 }

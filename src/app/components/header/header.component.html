@@ -5,9 +5,10 @@
   </div>
 
   <div class="user-actions">
-    <button class="notification-btn">
-      <i class="bi bi-bell"></i>
-    </button>
+    <button class="notification-btn" [routerLink]="['/notificacoes']">
+  <i class="bi bi-bell"></i>
+</button>
+
     <div class="user-profile">
       <img [src]="(usuario$ | async)?.fotoPerfil || 'https://...default-image.png'" alt="Perfil">
       <span>{{ (usuario$ | async)?.name }}</span>

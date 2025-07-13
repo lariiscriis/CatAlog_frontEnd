@@ -169,6 +169,7 @@ export class AdminComponent implements OnInit {
 
       this.usuarioService.buscarPorId(emp.id).subscribe(usuario => {
         emp.usuario = {
+          fotoPerfil: usuario.fotoPerfil,
           name: usuario.name,
           email: usuario.email
         };

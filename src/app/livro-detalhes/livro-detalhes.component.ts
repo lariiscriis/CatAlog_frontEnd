@@ -32,7 +32,7 @@ export class LivroDetalhesComponent implements OnInit {
   anotacoes: Anotacao[] = [];
   novaNota = '';
   paginaNota = 1;
-  diasRestantes = 0;
+  diasRestantes = 7;
   currentRating = 0;
   activeTab: 'notas' | 'avaliacao' = 'notas';
   showEmprestimoModal = false;
@@ -55,14 +55,14 @@ export class LivroDetalhesComponent implements OnInit {
 
     this.estante = estantesValidas.includes(estanteParam as any)
       ? (estanteParam as typeof this.estante)
-      : 'favorito';
+      : 'desejado';
 
     if (id) {
       this.bookService.buscarPorId(id).subscribe({
         next: (data) => {
           this.livro = this.mapLivroApiToLivroEstante(data);
           this.livro.status = this.estante;
-          this.calcularDiasRestantes();
+          this.buscarEmprestimoDoLivro();
           this.carregarAnotacoes();
         },
         error: (err) => this.toastr.error('Erro ao buscar livro'),
@@ -71,10 +71,12 @@ export class LivroDetalhesComponent implements OnInit {
   }
 
   private mapLivroApiToLivroEstante(data: any): LivroEstante {
+    console.log("Livro recebido:", data);
+
     return {
       ...data,
       id_livro: data.idLivro,
-      data_devolucao: data.dataDevolucao,
+      data_prevista_devolucao: data.dataPrevistaDevolucao,
     };
   }
 
@@ -146,9 +148,9 @@ private carregarAnotacoes(): void {
 
 
   calcularDiasRestantes(): void {
-    if (!this.livro?.data_devolucao) return;
+    if (!this.livro?.data_prevista_devolucao) return;
     const hoje = new Date();
-    const devolucao = new Date(this.livro.data_devolucao);
+    const devolucao = new Date(this.livro.data_prevista_devolucao);
     this.diasRestantes = Math.ceil((devolucao.getTime() - hoje.getTime()) / (1000 * 3600 * 24));
   }
 
@@ -209,6 +211,27 @@ private carregarAnotacoes(): void {
     this.showEmprestimoModal = false;
     this.solicitarEmprestimo();
   }
+private buscarEmprestimoDoLivro(): void {
+  this.usuarioService.getUsuarioLogado().subscribe(usuario => {
+    if (!usuario?.id || !this.livro?.id_livro) return;
+
+    this.emprestimoService.buscarEmprestimosAtivos(usuario.id).subscribe({
+      next: (emprestimos) => {
+        const emprestimo = emprestimos.find(e =>
+          (e.livro?.id_livro || e?.idLivro) === this.livro.id_livro,
+        );
+         console.log('Empréstimo atual:', emprestimo)
+        if (emprestimo?.dataPrevistaDevolucao) {
+          this.livro.data_prevista_devolucao = emprestimo.dataPrevistaDevolucao;
+          this.calcularDiasRestantes();
+        }else{
+          console.log('Nenhum empréstimo ativo encontrado para este livro.');
+        }
+      },
+      error: () => this.toastr.error('Erro ao buscar empréstimo do livro'),
+    });
+  });
+}
 
   solicitarEmprestimo(): void {
     const token = localStorage.getItem('auth-token');
@@ -225,6 +248,7 @@ private carregarAnotacoes(): void {
           id: usuario.id,
         }).subscribe({
           next: () => {
+            this.calcularDiasRestantes();
             this.toastr.success('Empréstimo realizado!');
             this.livro.status = 'emprestado';
             this.adicionarNaEstante('emprestado');

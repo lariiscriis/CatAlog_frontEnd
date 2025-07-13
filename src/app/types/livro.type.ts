@@ -25,5 +25,6 @@ export interface LivroEstante extends Livro {
   status: 'favorito' | 'emprestado' | 'desejado';
   notas?: Nota[];
   data_devolucao?: string;
+  data_prevista_devolucao?: string;
   idEmprestimo?: number;
 }

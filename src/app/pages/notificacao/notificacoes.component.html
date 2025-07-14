@@ -10,7 +10,13 @@
       <div *ngIf="notificacoes.length > 0; else semNotificacoes">
         <div class="notificacao" *ngFor="let notif of notificacoes">
           <p>{{ notif.texto }}</p>
-          <small>{{ notif.dataDevolucao | date:'fullDate' }} às {{ notif.dataDevolucao | date:'shortTime' }}</small>
+          <small>
+            {{ notif.dataNotificacao | date:"MMMM d, y 'às' HH:mm":'en-US' }}
+          </small>
+          <small *ngIf="notif.dataDevolucao" style="font-weight: bold; color: rgba(31,64,64,0.8) ;">
+            • Devolução prevista para
+            {{ notif.dataDevolucao | date:"MMMM d, y 'às' HH:mm":'en-US' }}
+          </small>
         </div>
       </div>
 

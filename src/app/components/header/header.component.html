@@ -1,6 +1,6 @@
 <header class="header">
   <div class="search-bar">
-    <input type="text" placeholder="Pesquisar livros...">
+    <input type="text" placeholder="Pesquisar livros..." [(ngModel)]="termoBusca" (input)="buscarLivros()">
     <i class="bi bi-search"></i>
   </div>
 

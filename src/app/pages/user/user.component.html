@@ -8,9 +8,8 @@
   <!-- Conteúdo Principal -->
   <div class="main-content">
     <!-- Cabeçalho -->
-    <app-header>
+    <app-header (termoBuscaChange)="buscarLivros($event)"></app-header>
 
-    </app-header>
     <!-- Carrossel Principal -->
     <section class="featured-books">
       <h2>Livros do Acervo</h2>

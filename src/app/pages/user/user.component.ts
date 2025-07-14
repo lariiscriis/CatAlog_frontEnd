@@ -19,6 +19,7 @@ import {Livro} from '../../types/livro.type';
 
 
 export class UserComponent implements OnInit {
+  termoBusca: string = '';
 
   user = {
     name: 'Usuário teste',
@@ -127,9 +128,23 @@ export class UserComponent implements OnInit {
     }
   }
 
-  viewDetails(book: Livro): void {
-    // implementar navegação ou modal
+  buscarLivros(termo: string) {
+    this.currentPage = 1;
+    this.termoBusca = termo;
+
+    if (termo.trim()) {
+      this.bookservice.buscarPorAutorOuTitulo(termo).subscribe(livros => {
+        this.filteredBooks = livros;
+        this.updatePagination();
+      });
+    } else {
+      this.filteredBooks = [...this.allBooks];
+      this.updatePagination();
+    }
   }
+
+
+
 
 
 

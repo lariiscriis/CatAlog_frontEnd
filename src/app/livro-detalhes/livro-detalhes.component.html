@@ -36,47 +36,43 @@
         </div>
 
         <p class="descricao">{{ livro.descricao }}</p>
-        <ng-template #semNotas>
-          <div class="comments-section">
-            <h2>Suas Notas</h2>
-            <p class="no-notes">Nenhuma anotação cadastrada para este livro.</p>
-          </div>
-        </ng-template>
+
 
         <!-- Seção para Favoritos -->
-        <div *ngIf="livro.status === 'favorito' && anotacoes.length > 0; else semNotas" class="comments-section">
+        <div *ngIf="livro.status === 'favorito'" class="comments-section">
 
 
           <h2>Suas Notas</h2>
-          <div class="comment-card"  *ngFor="let nota of anotacoes">
+          <ng-container *ngIf="anotacoes.length > 0; else semNotas">
+            <div class="comment-card" *ngFor="let nota of anotacoes">
 
-            <div class="header-anotation">
-              <p><strong>Página {{ nota.pagina }}</strong></p>
-
-            </div>
-
-            <p style=" margin: 20px 0;">{{ nota.nota }}</p>
-
-            <div class="footer-card-anotation" >
-
-              <small >
-                {{ nota.dataNota | date:'longDate' }}
-                •
-                {{ nota.dataNota | date:'HH:mm' }}
-              </small>
-
-              <div class="cat-rating" style="display: flex; gap: 4px;">
-                 <span *ngFor="let star of [1,2,3,4,5]" (click)="rateBook(star)">
-                 <img style="width: 24px; height: 24px; cursor: default; transition: none; transform: none" [src]="star <= nota.avaliacao ? 'assets/svg/hearts (2).png' : 'assets/svg/cry (1).png'"
-                      alt="Avaliação"
-                      class="rating-icon">
-                  </span>
+              <div class="header-anotation">
+                <p><strong>Página {{ nota.pagina }}</strong></p>
               </div>
+
+              <p style="margin:20px 0;">{{ nota.nota }}</p>
+
+              <div class="footer-card-anotation">
+                <small>
+                  {{ nota.dataNota | date:'longDate' }} •
+                  {{ nota.dataNota | date:'HH:mm' }}
+                </small>
+
+                <div class="cat-rating" style="display:flex;gap:4px;">
+          <span *ngFor="let star of [1,2,3,4,5]" (click)="rateBook(star)">
+            <img  style="width:24px;height:24px;cursor:default"
+                  [src]="star <= nota.avaliacao
+                        ? 'assets/svg/hearts (2).png'
+                        : 'assets/svg/cry (1).png'">
+          </span>
+                </div>
+              </div>
+
             </div>
-
-
-          </div>
-
+          </ng-container>
+          <ng-template #semNotas>
+            <p class="no-notes">Nenhuma anotação cadastrada para este livro.</p>
+          </ng-template>
 
         </div>
 

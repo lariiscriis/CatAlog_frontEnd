@@ -37,6 +37,14 @@ export class LivroDetalhesComponent implements OnInit {
   activeTab: 'notas' | 'avaliacao' = 'notas';
   showEmprestimoModal = false;
   showMultaModal = false;
+  showEditModal      = false;
+  showConfirmEdit    = false;
+  editNotaTexto = '';
+  editPagina = 1;
+  editRating = 0;
+  selectedNota: Anotacao | null = null;
+  showDeleteModal = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -262,4 +270,77 @@ private buscarEmprestimoDoLivro(): void {
       error: () => alert('Erro ao buscar usuário.'),
     });
   }
+
+  // MODAL DE EDICAO
+
+  abrirEdicao(nota: Anotacao): void{
+    this.selectedNota = nota;
+    this.editNotaTexto = nota.nota;
+    this.editPagina = nota.pagina;
+    this.editRating = nota.avaliacao;
+    this.showEditModal = true;
+
+  }
+
+  fecharEditModal(): void{
+    this.showEditModal = false;
+    this.selectedNota = null;
+  }
+  perguntarConfirmacao(): void {
+    this.showEditModal = false;
+    this.showConfirmEdit = true;
+  }
+
+  confirmarEdicao(): void {
+    if (!this.selectedNota) return;
+
+    const body: Anotacao = {
+      ...this.selectedNota,
+      nota      : this.editNotaTexto.trim(),
+      pagina    : this.editPagina,
+      avaliacao : this.editRating
+    };
+
+    this.anotacaoService.atualizar(this.selectedNota.idAnotacao!, body).subscribe({
+      next: (atualizada) => {
+        this.anotacoes = this.anotacoes.map(n =>
+          n.id === atualizada.id ? atualizada : n
+        );
+        this.toastr.success('Anotação atualizada!');
+        this.showConfirmEdit = false;
+        this.selectedNota = null;
+      },
+      error: () => this.toastr.error('Erro ao atualizar anotação.')
+    });
+  }
+
+  // MODAL EXCLUIR ANOTACAO
+  abrirExclusao(nota: Anotacao): void{
+    this.selectedNota = nota;
+    this.showDeleteModal = true;
+  }
+
+  fecharDeleteModal(): void{
+    this.showDeleteModal = false;
+    this.selectedNota = null;
+  }
+
+  confirmarExclusao(): void {
+    if (!this.selectedNota) return;
+
+    this.anotacaoService.deletar(Number(this.selectedNota.idAnotacao)).subscribe({
+      next: () => {
+        const idRemovido = Number(this.selectedNota!.idAnotacao);
+        this.anotacoes = this.anotacoes.filter(
+          n => Number(n.idAnotacao) !== idRemovido
+        );
+
+        this.toastr.success('Anotação excluída!');
+        this.showDeleteModal = false;
+        this.selectedNota = null;
+      },
+      error: () => this.toastr.error('Erro ao excluir anotação.')
+    });
+  }
+
 }

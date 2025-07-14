@@ -102,20 +102,28 @@
 
             <div class="comment-card"  *ngFor="let nota of anotacoes">
 
-              <p><strong>Página {{ nota.pagina }}</strong></p>
-                <p style="margin: 10px 10px 10px 0px">{{ nota.nota }}</p>
+              <div class="header-anotation">
+                <p><strong>Página {{ nota.pagina }}</strong></p>
 
-              <div class="footer-card-anotation" style="flex-direction: row; display: flex; justify-content: space-between; ">
+                <div class="actions-anotation" >
+                    <button class="edit-anotation" (click)="abrirEdicao(nota)"><i class="bi bi-pencil-square" style="margin-right: 10px; "></i> </button>
+                    <button class="delete-anotation" (click)="abrirExclusao(nota)"><i class="bi bi-trash3-fill"></i></button>
+                </div>
+              </div>
 
-                <small>
+                <p style=" margin: 20px 0;">{{ nota.nota }}</p>
+
+              <div class="footer-card-anotation" >
+
+                <small >
                   {{ nota.dataNota | date:'longDate' }}
-                  -
+                  •
                   {{ nota.dataNota | date:'HH:mm' }}
                 </small>
 
-                <div class="cat-rating" >
+                <div class="cat-rating" style="display: flex; gap: 4px;">
                  <span *ngFor="let star of [1,2,3,4,5]" (click)="rateBook(star)">
-                 <img [src]="star <= nota.avaliacao ? 'assets/svg/hearts (2).png' : 'assets/svg/cry (1).png'"
+                 <img style="width: 24px; height: 24px; cursor: default; transition: none; transform: none" [src]="star <= nota.avaliacao ? 'assets/svg/hearts (2).png' : 'assets/svg/cry (1).png'"
                      alt="Avaliação"
                      class="rating-icon">
                   </span>
@@ -171,4 +179,66 @@
     </div>
   </div>
 
+
+
+<!--  MODAL EDICAO-->
+  <div class="modal-overlay modal-edicao" *ngIf="showEditModal">
+    <div class="modal-content">
+      <span class="close" (click)="fecharEditModal()">&times;</span>
+      <h3>Editar Anotação</h3>
+
+      <h2>Página {{ editPagina }}</h2>
+
+      <div class="edit-rating">
+        <label>Avaliação:</label>
+        <div class="cat-rating">
+        <span *ngFor="let star of [1,2,3,4,5]"
+              (click)="editRating = star">
+          <img [src]="star <= editRating
+                ? 'assets/svg/hearts (2).png'
+                : 'assets/svg/cry (1).png'"
+               alt="rating" class="rating-icon">
+      </span>
+        </div>
+      </div>
+
+      <div class="anotation-edit-area" >
+        <label>Editar Nota:</label>
+        <textarea rows="4" [(ngModel)]="editNotaTexto" class="edit-text-area"></textarea>
+      </div>
+
+
+      <div class="modal-actions">
+        <button class="modal-btn cancel-btn" (click)="fecharEditModal()">Cancelar</button>
+        <button class="modal-btn confirm-btn" (click)="perguntarConfirmacao()">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+<!--  CONFIRMAR EDICAO-->
+  <div class="modal-overlay" *ngIf="showConfirmEdit">
+    <div class="modal-content">
+      <h3>Confirmar Edição</h3>
+      <p>Tem certeza de que deseja salvar as alterações nesta anotação?</p>
+
+      <div class="modal-actions">
+        <button class="modal-btn cancel-btn" (click)="showConfirmEdit = false">Não</button>
+        <button class="modal-btn confirm-btn" (click)="confirmarEdicao()">Sim</button>
+      </div>
+    </div>
+  </div>
+
+
+<!--  CONFIRMA EXCLUSAO-->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal-content">
+      <h3>Excluir Anotação</h3>
+      <p>Deseja realmente excluir esta anotação?</p>
+
+      <div class="modal-actions">
+        <button class="modal-btn cancel-btn" (click)="fecharDeleteModal()">Cancelar</button>
+        <button class="modal-btn confirm-btn" (click)="confirmarExclusao()">Excluir</button>
+      </div>
+    </div>
+  </div>
 </div>

@@ -9,7 +9,7 @@
   margin: 0 auto;
   flex: 2;
   padding: 20px;
-  
+
 }
 
 .profile-header {
@@ -19,10 +19,12 @@
   background-color: rgba(237, 223, 204, 0.51);
   padding: 1em;
   border-radius: 12px;
+
   .cover-photo {
     height: 200px;
     background-color: #D8BC97;
     border-radius: 10px;
+    border: 2px solid #677C69;
 
     img{
       height: 100%;
@@ -156,11 +158,12 @@
       gap: 15px;
       margin-bottom: 10px;
 
-      img {
+      .comment-book-cover {
         width: 50px;
         height: 70px;
         object-fit: cover;
         border-radius: 5px;
+        transform: translateY(20%);
       }
 
       h3 {
@@ -182,6 +185,32 @@
     }
   }
 }
+
+
+.book-info > div {
+  flex: 1 1 auto;   /* ou simplesmente flex: 1; */
+}
+
+.title-rating {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center;
+}
+
+.title-rating .cat-rating {
+  display: flex;
+  gap: 4px;
+  margin-left: auto !important;
+}
+
+.title-rating .cat-rating img {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+
+
+
 
 .modal {
   position: fixed;

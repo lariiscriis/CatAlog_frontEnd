@@ -557,9 +557,18 @@ h2 {
   .rating-icon:hover {
     transform: scale(1.2);
   }
-
-
 }
+
+.leia-mais-btn {
+  background: none;
+  border: none;
+  color: #1F4040 ;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0;
+  margin-left: 5px;
+}
+
 
 
 

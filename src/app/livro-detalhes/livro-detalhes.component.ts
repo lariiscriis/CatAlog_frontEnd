@@ -44,6 +44,8 @@ export class LivroDetalhesComponent implements OnInit {
   editRating = 0;
   selectedNota: Anotacao | null = null;
   showDeleteModal = false;
+  showFullDescription: boolean = false;
+
 
 
   constructor(
@@ -55,6 +57,10 @@ export class LivroDetalhesComponent implements OnInit {
     private estanteService: EstanteService,
     private toastr: ToastrService
   ) {}
+
+  alternarDescricao(): void {
+    this.showFullDescription = !this.showFullDescription;
+  }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');

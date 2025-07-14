@@ -35,7 +35,20 @@
           <p><strong>Categoria:</strong> {{ livro.categoria }}</p>
         </div>
 
-        <p class="descricao">{{ livro.descricao }}</p>
+        <p class="descricao">
+          <ng-container *ngIf="livro?.descricao as desc">
+            {{ showFullDescription ? desc : (desc | slice:0:200) }}
+            <span *ngIf="!showFullDescription && desc.length > 200">...</span>
+
+            <button
+              class="leia-mais-btn"
+              *ngIf="desc.length > 200"
+              (click)="alternarDescricao()">
+              {{ showFullDescription ? 'Ler menos' : 'Ler mais' }}
+            </button>
+          </ng-container>
+        </p>
+
 
 
         <!-- Seção para Favoritos -->

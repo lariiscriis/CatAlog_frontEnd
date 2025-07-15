@@ -134,7 +134,10 @@ export class UserComponent implements OnInit {
 
     if (termo.trim()) {
       this.bookservice.buscarPorAutorOuTitulo(termo).subscribe(livros => {
-        this.filteredBooks = livros;
+        this.filteredBooks = livros.map(b => ({
+          ...b,
+          id_livro: b.id_livro ?? b.idLivro
+        }));
         this.updatePagination();
       });
     } else {
@@ -142,6 +145,7 @@ export class UserComponent implements OnInit {
       this.updatePagination();
     }
   }
+
 
 
 

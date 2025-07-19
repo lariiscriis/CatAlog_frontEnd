@@ -9,6 +9,8 @@ import { AnotacaoService } from '../../services/anotacao.service';
 import { Anotacao } from '../../types/anotacao.type';
 import { BookService } from '../../services/book.service';
 import { EmprestimoService } from '../../services/emprestimo.service';
+import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-perfil-usuario',
@@ -26,31 +28,18 @@ export class PerfilUsuarioComponent implements OnInit {
   user: any = null;           // dados do usuário logado
   editUser: any = {};         // objeto para edição
   showEditModal = false;      // controle do modal
-anotacoes: Anotacao[] = [];
-totalEmprestimos: number = 0;
+  anotacoes: Anotacao[] = [];
+  totalEmprestimos: number = 0;
+  showDeleteModal = false;
 
-  comments = [
-    {
-      bookTitle: 'Fogo & Sangue',
-      bookCover: 'https://m.media-amazon.com/images/I/818yNY0mMZL.jpg',
-      page: 156,
-      date: new Date('2023-05-15'),
-      text: 'Adorei a descrição da Dança dos Dragões neste capítulo!'
-    },
-    {
-      bookTitle: 'O Senhor dos Anéis',
-      bookCover: 'https://m.media-amazon.com/images/I/71ZLavBjpRL._AC_UF1000,1000_QL80_.jpg',
-      page: 89,
-      date: new Date('2023-04-22'),
-      text: 'A cena do Conselho de Elrond é incrível, cheia de detalhes!'
-    }
-  ];
 
-constructor(
+  constructor(
   private usuarioService: UsuarioService,
   private anotacaoService: AnotacaoService,
   private bookService: BookService,
   private emprestimoService: EmprestimoService,
+  private toastrService: ToastrService,
+  private router: Router,
   private http: HttpClient
 ) {}
 
@@ -67,16 +56,16 @@ carregarUsuarioLogado(): void {
         console.log('Usuário carregado com sucesso:', usuario);
         this.user = usuario;
         this.editUser = { ...usuario };
-        this.carregarTotalEmprestimos(usuario.id); // 👈 Aqui!
-        this.carregarAnotacoes(usuario.id); // 👈 Aqui!
+        this.carregarTotalEmprestimos(usuario.id);
+        this.carregarAnotacoes(usuario.id);
       } else {
         console.warn('Nenhum usuário retornado.');
-        alert('Usuário não encontrado. Verifique se está logado.');
+        this.toastrService.info('Usuário não encontrado. Verifique se está logado.');
       }
     },
     error: (err) => {
       console.error('Erro ao buscar usuário logado:', err);
-      alert('Erro ao carregar dados do usuário logado.');
+      this.toastrService.error('Erro ao carregar dados do usuário logado.');
     }
   });
 }
@@ -143,7 +132,7 @@ carregarAnotacoes(idUsuario: string): void {
 
   saveProfile(): void {
     if (!this.user?.email) {
-      alert('Dados do usuário não carregados. Tente novamente.');
+      this.toastrService.error('Dados do usuário não carregados. Tente novamente.');
       return;
     }
 
@@ -165,32 +154,39 @@ const dadosAtualizados = {
           console.log('Usuário atualizado:', res);
           this.user = { ...res };
           this.closeEditModal();
-          alert('Perfil atualizado com sucesso!');
+          this.toastrService.success('Perfil atualizado com sucesso!');
         },
         error: (err) => {
           console.error('Erro ao atualizar perfil:', err);
-          alert('Erro ao atualizar perfil. Verifique os dados e tente novamente.');
+          this.toastrService.error('Erro ao atualizar perfil. Verifique os dados e tente novamente.');
         }
       });
   }
 
+  openDeleteModal(): void {
+    this.showDeleteModal = true;
+  }
+
+  closeDelete(): void {
+    this.showDeleteModal = false;
+  }
+
   confirmDelete(): void {
     if (!this.user?.id) {
-      alert('ID do usuário não disponível.');
+      this.toastrService.info('ID do usuário não disponível.');
       return;
     }
 
-    if (confirm('Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.')) {
       this.usuarioService.deletarUsuario(this.user?.id).subscribe({
         next: () => {
-          alert('Conta excluída com sucesso!');
-          // Aqui você pode redirecionar para o login ou homepage
+          this.toastrService.success('Conta excluída com sucesso!');
+            this.router.navigate(["signup"]);
         },
         error: (err) => {
           console.error('Erro ao excluir conta:', err);
-          alert('Erro ao excluir a conta.');
+          this.toastrService.error('Erro ao excluir a conta.');
         }
       });
-    }
+
   }
 }

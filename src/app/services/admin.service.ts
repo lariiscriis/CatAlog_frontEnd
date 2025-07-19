@@ -85,6 +85,35 @@ updateUsuario(email: string, dados: any, fotoPerfil?: File, fotoBackground?: Fil
     });
   }
 
+  listarTodos(usuarioAutenticado: string = 'admin@gmail.com'): Observable<Usuario[]> {
+    const url = `${this.apiUrl}/listar/${encodeURIComponent(usuarioAutenticado)}`;
+    return this.http.get<Usuario[]>(url, {
+      headers: this.getAuthHeaders()
+    }).pipe(
+      tap(lista => console.log('Lista de usuários recebida:', lista)),
+      catchError(err => {
+        console.error('Erro ao listar usuários', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
+  banirUsuario(email: string): Observable<any> {
+    const emailAdmin = 'admin@gmail.com';
+    const url = `${this.apiUrl}/${emailAdmin}/banir/${encodeURIComponent(email)}`;
+
+    return this.http.put(url, null, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    }).pipe(
+      tap(() => console.log(`Usuário ${email} banido com sucesso`)),
+      catchError(err => {
+        console.error('Erro ao banir usuário:', err);
+        return throwError(() => err);
+      })
+    );
+  }
+
   /**
    * Deleta a conta do usuário autenticado
    */

@@ -10,6 +10,7 @@ export interface Emprestimo {
   livro?: {
     titulo: string;
     capa: string;
+    categoria: string;
   };
   usuario?: {
     fotoPerfil: string;

@@ -1,3 +1,11 @@
+:root{
+  --primary-color: #677C69;
+  --text-color: #1F4040;
+  --secondary-color: #40534D;
+  --background-color: #D8BC97;
+  --main-text-color-white: #fff;
+}
+
 .dashboard-container {
   display: flex;
   min-height: 100vh;
@@ -91,7 +99,7 @@
     }
 
     .delete-btn {
-      background-color: #ff6b6b;
+      background-color: darkred;
       color: white;
     }
   }
@@ -188,7 +196,7 @@
 
 
 .book-info > div {
-  flex: 1 1 auto;   /* ou simplesmente flex: 1; */
+  flex: 1 1 auto;
 }
 
 .title-rating {
@@ -209,8 +217,34 @@
 }
 
 
+.modal-actions {
+  margin-top: 1.5rem;
+  display:flex;
+  justify-content:center;
+  gap: .75rem;
 
+  &.center {
+    justify-content:center;
+  }
 
+  button {
+    min-width:110px;
+    padding:.55rem 1rem;
+    border:none;
+    border-radius:6px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .primary {
+    background:#677C69;
+    color:#fff; }
+  .ghost   {
+    background:#f1f1f1;
+  }
+  .danger  {
+    background: darkred;
+    color:#fff; }
+}
 
 .modal {
   position: fixed;

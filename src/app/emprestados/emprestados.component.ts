@@ -21,7 +21,6 @@ interface Shelf {
 })
 export class EmprestadosComponent {
   shelves: Shelf[] = [];
-  usuarioId = 'ed94a5a8-1d2d-409f-806e-4827f60fd4ff';
 
 
   constructor(private estanteService: EstanteService,   private usuarioService: UsuarioService
@@ -42,17 +41,7 @@ export class EmprestadosComponent {
           }
         });
       }
-  carregarLivrosFavoritos(): void {
-    this.estanteService.listarLivros(this.usuarioId, 'emprestado')
-      .subscribe({
-        next: (livros) => {
-          console.log('Dados recebidos da API:', livros); // Debug
 
-          this.shelves = this.organizarEmEstantes(livros);
-        },
-        error: (err) => console.error('Erro ao carregar emprestado:', err)
-      });
-  }
 
     carregarLivrosEmprestados(usuarioId: string): void {
       this.estanteService.listarLivros(usuarioId, 'emprestado')

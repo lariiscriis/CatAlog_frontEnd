@@ -22,7 +22,6 @@ interface Shelf {
   imports: [
     CommonModule,
     RouterModule,
-    RouterLink,
     SidebarComponent,
     HeaderComponent
   ],

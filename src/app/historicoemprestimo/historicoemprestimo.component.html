@@ -11,7 +11,7 @@
       <div class="bookshelf-container">
         <div class="shelf-section" *ngFor="let shelf of estantes">
           <div class="book-row">
-            <div class="book" *ngFor="let livro of shelf.books">
+            <div class="book" *ngFor="let livro of shelf.books" >
               <img
                 [src]="livro.capa || 'https://via.placeholder.com/120x180?text=Sem+Capa'"
                 [alt]="livro.titulo"

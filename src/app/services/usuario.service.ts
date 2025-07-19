@@ -44,6 +44,7 @@ export class UsuarioService {
   );
 }
 
+
     getUsuarioLogado(): Observable<Usuario> {
     const url = `${this.apiUrl}/me`;
 
@@ -56,38 +57,37 @@ export class UsuarioService {
       })
     );
   }
-  buscarPorId(id: string): Observable<Usuario> {
-    const url = `${this.apiUrl}/${id}`;
-    return this.http.get<Usuario>(url, {
-      headers: this.getAuthHeaders()
-    }).pipe(
-      tap(u => console.log('fetch usuario id', id, u)),
-      catchError(err => {
-        console.error('Erro ao buscar usuário', err);
-        return throwError(() => err);
-      })
-    );
-  }
+    buscarPorId(id: string): Observable<Usuario> {
+      const url = `${this.apiUrl}/${id}`;
+      return this.http.get<Usuario>(url, {
+        headers: this.getAuthHeaders()
+      }).pipe(
+        tap(u => console.log('fetch usuario id', id, u)),
+        catchError(err => {
+          console.error('Erro ao buscar usuário', err);
+          return throwError(() => err);
+        })
+      );
+    }
 
   getUsuarioAtual(): Usuario | null {
     return this.usuarioSubject.getValue();
   }
-updateUsuario(email: string, dados: any, fotoPerfil?: File, fotoBackground?: File) {
-    const formData = new FormData();
-    formData.append('dados', JSON.stringify(dados));
-    if (fotoPerfil) formData.append('fotoPerfil', fotoPerfil);
-    if (fotoBackground) formData.append('fotoBackground', fotoBackground);
+  updateUsuario(email: string, dados: any, fotoPerfil?: File, fotoBackground?: File) {
+      const formData = new FormData();
+      formData.append('dados', JSON.stringify(dados));
+      if (fotoPerfil) formData.append('fotoPerfil', fotoPerfil);
+      if (fotoBackground) formData.append('fotoBackground', fotoBackground);
 
-    const url = `${this.apiUrl}/${email}`;
+      const url = `${this.apiUrl}/${email}`;
 
-    return this.http.put<Usuario>(url, formData, {
-      headers: this.getAuthHeaders()
-    });
-  }
+      return this.http.put<Usuario>(url, formData, {
+        headers: this.getAuthHeaders()
+      });
+    }
 
-  /**
-   * Deleta a conta do usuário autenticado
-   */
+
+
   deletarUsuario(id: string) {
     const url = `${this.apiUrl}/${id}`;
     return this.http.delete(url, {

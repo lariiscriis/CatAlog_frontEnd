@@ -21,7 +21,7 @@
           <button class="edit-btn" (click)="openEditModal()">
             <i class="bi bi-pencil"></i> Editar Perfil
           </button>
-          <button class="delete-btn" (click)="confirmDelete()">
+          <button class="delete-btn" (click)="openDeleteModal()">
             <i class="bi bi-trash"></i> Excluir Conta
           </button>
         </div>
@@ -109,6 +109,19 @@
         </div>
 
         <button class="save-btn" (click)="saveProfile()">Salvar Alterações</button>
+      </div>
+    </div>
+
+
+    <div class="modal" *ngIf="showDeleteModal">
+      <div class="modal-content small" style="text-align: center">
+        <h3>Excluir conta</h3>
+        <p>Tem certeza de que deseja excluir sua conta ? Está ação <strong>não</strong> pode ser desfeita</p>
+
+        <div class="modal-actions center">
+          <button class="ghost"  (click)="closeDelete()">Cancelar</button>
+          <button class="danger" (click)="confirmDelete()">Excluir</button>
+        </div>
       </div>
     </div>
   </div>

@@ -52,10 +52,7 @@ export class LoginComponent {
       error: () => this.toastrService.error("Falha no login. Verifique seus dados e tente novamente.")
     })
 
-      setTimeout(() => {
-        this.router.navigate(["user"]);
-      }, 1000);
-    
+
 }
 
   navigate(){

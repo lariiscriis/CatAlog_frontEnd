@@ -1,147 +1,380 @@
-<div class="admin-container">
-  <div class="tabs">
-    <button [class.active]="activeTab === 'livros'" (click)="activeTab = 'livros'">Gerenciar Livros</button>
-    <button [class.active]="activeTab === 'emprestimos'" (click)="activeTab = 'emprestimos'">Gerenciar Empréstimos</button>
+<div class="admin-nav">
+  <img src="assets/svg/logo_catalog.svg" class="logo" alt="logo" >
 
+
+  <div class="admin-bem-vindo">
+    <h1>Olá, Admin!</h1>
+    <img src="assets/svg/paw.svg" alt="patinha">
     <button class="logout-btn" (click)="logout()">
       <i class="bi bi-box-arrow-right"></i>
     </button>
   </div>
 
-  <div *ngIf="activeTab === 'livros'" class="tab-content">
-    <div class="add-book">
-      <h2>Adicionar Livro</h2>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Título</label>
-          <input [(ngModel)]="novoLivro.titulo" placeholder="Título do livro">
-        </div>
-        <div class="form-group">
-          <label>Autores</label>
-          <input [(ngModel)]="novoLivro.autores" placeholder="Autores (separados por vírgula)">
-        </div>
-        <div class="form-group">
-          <label>Editora</label>
-          <input [(ngModel)]="novoLivro.editora" placeholder="Editora">
-        </div>
-        <div class="form-group">
-          <label>Descrição</label>
-          <textarea [(ngModel)]="novoLivro.descricao" placeholder="Descrição do livro"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Categoria</label>
-          <input [(ngModel)]="novoLivro.categoria" placeholder="Categoria">
-        </div>
-        <div class="form-group">
-          <label>Capa (URL)</label>
-          <input [(ngModel)]="novoLivro.capa" placeholder="URL da imagem da capa">
-        </div>
-        <div class="form-group">
-          <label>Data de Publicação</label>
-          <input type="text" [(ngModel)]="novoLivro.data_publicacao">
-        </div>
-        <div class="form-group">
-          <label>Número de Páginas</label>
-          <input type="number" [(ngModel)]="novoLivro.numeroPaginas" placeholder="Número de páginas">
-        </div>
-        <div class="form-group">
-          <label>Quantidade</label>
-          <input type="number" [(ngModel)]="novoLivro.qtde_livros" placeholder="Quantidade disponível">
-        </div>
-        <div class="form-group">
-          <label>Disponibilidade</label>
-          <select [(ngModel)]="novoLivro.disponibilidade">
-            <option value="true">Disponível</option>
-            <option value="false">Indisponível</option>
-          </select>
-        </div>
-        <button class="save-btn" (click)="adicionarLivro()">Salvar Livro</button>
-      </div>
-    </div>
+</div>
 
-    <h3>Lista de Livros</h3>
-    <div class="search-bar">
-      <input type="text" [(ngModel)]="termoBusca" placeholder="Buscar por título ou autor" (input)="buscarLivros()">
-    </div>
 
-    <div *ngFor="let livro of livros" class="livro-item">
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Título</label>
-          <input [(ngModel)]="livro.titulo">
-        </div>
-        <div class="form-group">
-          <label>Autores</label>
-          <input [(ngModel)]="livro.autores">
-        </div>
-        <div class="form-group">
-          <label>Editora</label>
-          <input [(ngModel)]="livro.editora">
-        </div>
-        <div class="form-group">
-          <label>Descrição</label>
-          <textarea [(ngModel)]="livro.descricao"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Categoria</label>
-          <input [(ngModel)]="livro.categoria">
-        </div>
-        <div class="form-group">
-          <label>Capa (URL)</label>
-          <input [(ngModel)]="livro.capa">
-        </div>
-        <div class="form-group">
-          <label>Data Publicação</label>
-          <input type="text" [(ngModel)]="livro.data_publicacao">
-        </div>
-        <div class="form-group">
-          <label>Páginas</label>
-          <input type="number" [(ngModel)]="livro.numeroPaginas">
-        </div>
-        <div class="form-group">
-          <label>Quantidade</label>
-          <input type="number" [(ngModel)]="livro.qtde_livros">
-        </div>
-        <div class="form-group">
-          <label>Disponível</label>
-          <select [(ngModel)]="livro.disponibilidade">
-            <option [value]="true">Sim</option>
-            <option [value]="false">Não</option>
-          </select>
-        </div>
-        <div class="actions">
-          <button class="edit-btn" (click)="editarLivro(livro)">Salvar Edição</button>
-          <button class="delete-btn" (click)="deletarLivro(livro)">Excluir</button>
-        </div>
-      </div>
-    </div>
+<div class="admin-container">
+
+
+
+  <div class="tabs">
+    <button [class.active]="activeTab === 'livros'"        (click)="activeTab='livros'">Livros</button>
+    <button [class.active]="activeTab === 'emprestimos'"   (click)="activeTab='emprestimos'">Empréstimos</button>
+    <button [class.active]="activeTab === 'usuarios'"      (click)="activeTab='usuarios'">Usuários</button>
+    <button [class.active]="activeTab === 'dashboard'" (click)="activeTab='dashboard'">Dashboard</button>
+
+
+
   </div>
 
-  <div *ngIf="activeTab === 'emprestimos'" class="tab-content">
-    <h3>Gerenciar Empréstimos</h3>
-    <div class="filtros">
-      <button [class.active]="filtroAtivo === 'todos'" (click)="carregarTodosEmprestimos()">Todos</button>
-      <button [class.active]="filtroAtivo === 'atrasados'" (click)="carregarEmprestimosAtrasados()">Atrasados</button>
+  <section *ngIf="activeTab==='livros'" class="tab-content livros-tab">
+    <div class="barra-topo">
+      <input type="text" placeholder="Buscar por título ou autor"
+             [(ngModel)]="termoBusca" (input)="buscarLivros()">
+
+      <button class="primary" (click)="openCreate()">Criar Livro</button>
     </div>
 
-    <div class="emprestimos-lista">
-      <div *ngFor="let emp of emprestimos" class="emprestimo-item" [class.atrasado]="estaAtrasado(emp.dataPrevistaDevolucao)">
-        <div class="livro-info">
-          <img [src]="emp.livro?.capa || 'assets/default-book.png'" alt="Capa do livro" class="book-cover">
-          <div>
-            <h4>{{ emp.livro?.titulo || 'Livro desconhecido' }}</h4>
-          </div>
-        </div>
-        <div class="detalhes-emprestimo">
-          <img [src]="emp.usuario?.fotoPerfil" alt="Foto de perfil" width="50" class="profile-avatar">
-         <p><strong>Usuário:</strong> {{ emp.usuario?.name || 'N/A' }}</p>
-         <p><strong>Email:</strong> {{ emp.usuario?.email || 'N/A' }}</p>
-          <p><strong>Data Empréstimo:</strong> {{ emp.dataEmprestimo | date:'dd/MM/yyyy' }}</p>
-          <p><strong>Devolução Prevista:</strong> {{ emp.dataPrevistaDevolucao | date:'dd/MM/yyyy' }}</p>
-          <p *ngIf="emp.dataDevolucao"><strong>Devolvido em:</strong> {{ emp.dataDevolucao | date:'dd/MM/yyyy' }}</p>
-          <p><strong>Status:</strong> {{ emp.estado }}</p>
+
+    <h3>Acervo</h3>
+    <div class="grid-head">
+      <span>Livro</span>
+      <span>Categoria</span>
+      <span>Publicação</span>
+      <span>Editora</span>
+      <span>Disponibilidade</span>
+      <span>Autor</span>
+      <span class="actions-head"></span>
+    </div>
+
+    <div *ngFor="let livro of livros" class="grid-row" [class.indisponivel]="!livro.disponibilidade">
+      <div class="item">
+        <img [src]="livro.capa" alt="capa">
+        {{ livro.titulo }}
+      </div>
+
+      <div class="categoria">
+        <span *ngFor="let tag of (livro.categoria || '').split(',')">
+          {{ tag.trim() }}
+        </span>
+      </div>
+
+      <div class="publicacao">{{ livro.data_publicacao  | date:'longDate' }}</div>
+
+      <div class="editora">{{ livro.editora }}</div>
+
+      <div class="disponibilidade" [class.indisponivel]="!livro.disponibilidade"> {{ livro.disponibilidade ? 'Disponível' : 'Indisponível' }}</div>
+
+
+      <div class="autor">{{ livro.autores }}</div>
+
+      <div class="actions">
+        <i class="bi bi-pencil-square" (click)="openEdit(livro)"></i>
+        <i class="bi bi-trash3-fill"   (click)="openDelete(livro)"></i>
+      </div>
+    </div>
+  </section>
+
+  <section *ngIf="activeTab==='emprestimos'" class="tab-content emprestimos-tab">
+    <h3>Empréstimos</h3>
+
+    <div class="filters">
+      <button [class.active]="filtroAtivo==='todos'"      (click)="carregarTodosEmprestimos()">Todos</button>
+      <button [class.active]="filtroAtivo==='atrasados'"  (click)="carregarEmprestimosAtrasados()">Atrasados</button>
+      <button [class.active]="filtroAtivo==='devolvidos'"  (click)="carregarEmprestimosDevolvidos()">Devolvidos</button>
+      <button [class.active]="filtroAtivo==='em_andamento'"  (click)="carregarEmprestimosEmAndamento()">Em andamento</button>
+
+    </div>
+
+    <div *ngFor="let emp of emprestimos"  class="emp-card" [class.atrasado]="estaAtrasado(emp.dataPrevistaDevolucao)">
+      <img class="book" [src]="emp.livro?.capa">
+      <div class="emp-body">
+        <div class="data-titulo-emp">
+        <h4>{{ emp.livro?.titulo }}</h4>
+          <p>Data do Empréstimo: {{ emp.dataEmprestimo | date: 'longDate' }}</p>
+
+         <p>Data Prevista de Devolução: {{ emp.dataPrevistaDevolucao | date:'longDate' }}</p>
+
+          <p *ngIf="emp.dataDevolucao">Data de Devolução: {{ emp.dataDevolucao | date: 'longDate'}}</p>
+      </div>
+
+
+        <span class="status" [class.atrasado]="estaAtrasado(emp.dataPrevistaDevolucao)">{{ getMensagemEmprestimo(emp) }}</span>
+
+        <div class="user-badge">
+          <img class="avatar" [src]="emp.usuario?.fotoPerfil">
+          <p class="user-info-emp">{{ emp.usuario?.name }} • {{ emp.usuario?.email }}</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section *ngIf="activeTab==='usuarios'" class="tab-content usuarios-tab">
+    <h3>Usuários</h3>
+
+    <div class="barra-topo">
+      <input type="text" placeholder="Buscar usuário..." [(ngModel)]="buscaUsuario" (input)="filtrarUsuarios()">
+    </div>
+
+    <div class="user-row"
+         *ngFor="let u of usuariosFiltrados"
+         [class.banido]="!u.enabled">
+      <div class="user-info">
+<!--        <div class="cat-bg small"></div>-->
+        <img class="avatar-usuarios small" [src]="u?.fotoPerfil">
+        <div>
+          <strong>{{ u.name }}</strong>
+          <span>{{ u.email }}</span>
+        </div>
+      </div>
+      <button class="ghost danger" (click)="openBanirModal(u.email, u.name)" ><i class="bi bi-slash-circle"></i> Banir</button>
+    </div>
+  </section>
+
+
+  <section *ngIf="activeTab==='dashboard'" class="tab-content dashboard-tab">
+    <h3>Dashboard</h3>
+
+    <div class="dashboard-summary">
+      <div class="summary-card">
+        <div class="summary-box">
+          <h3 class="summary-label">Total de Usuários</h3>
+          <p class="summary-value ">{{ totalUsuarios }}</p>
+
+        </div>
+      </div>
+      <div class="summary-card">
+        <h3>Total de Livros</h3>
+        <p>{{ totalLivros }}</p>
+      </div>
+      <div class="summary-card">
+        <h3>Empréstimos Ativos</h3>
+        <p>{{ emprestimosAtivos }}</p>
+      </div>
+      <div class="summary-card">
+        <h3>Livros Disponíveis</h3>
+        <p>{{ livrosDisponiveis }}</p>
+      </div>
+    </div>
+
+    <div class="dashboard-container">
+
+      <div class="dashboard-card">
+        <h4>Livros mais emprestados</h4>
+        <ul>
+          <li *ngFor="let item of livrosMaisEmprestados">
+            <div class="user-badge-dash">
+            <img [src]="item.capa" class="capa-livro-dash">
+            {{ item.titulo }} ({{ item.quantidade }} empréstimos)
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="dashboard-card">
+        <h4> Usuários com mais atrasos</h4>
+        <ul>
+          <li *ngFor="let user of usuariosMaisAtrasos">
+
+            <div class="user-badge-dash">
+            <img [src]="user.fotoPerfil" class="avatar-usuarios">
+            {{ user.name }} - {{ user.totalAtrasos }} devoluções atrasadas
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="dashboard-card">
+        <h4> Categorias mais populares</h4>
+        <ul  *ngFor="let cat of categoriasMaisPopulares">
+
+          <div class="categoria-dash">
+            <li style="border: none" >
+              {{ cat.categoria }}
+            </li>
+
+            <p>  {{ cat.quantidade }} empréstimos</p>
+          </div>
+
+          <li></li>
+        </ul>
+      </div>
+
+    </div>
+
+
+
+  </section>
+
+
+</div>
+
+<div class="modal-overlay" *ngIf="showCreateModal">
+  <div class="modal">
+    <h2>Novo Livro</h2>
+
+    <form #createForm="ngForm">
+      <div class="modal-grid">
+        <label>Título*
+          <input type="text" [(ngModel)]="modalLivro.titulo"
+                 name="titulo" required />
+        </label>
+
+        <label>Autor(es)*
+          <input type="text" [(ngModel)]="modalLivro.autores"
+                 name="autores" required />
+        </label>
+
+        <label>Editora
+          <input type="text" [(ngModel)]="modalLivro.editora"
+                 name="editora" />
+        </label>
+
+        <label>Categoria
+          <input type="text" [(ngModel)]="modalLivro.categoria"
+                 name="categoria" placeholder="ex.: drama, fiction" />
+        </label>
+
+        <label>Data publicação*
+          <input type="date" [(ngModel)]="modalLivro.data_publicacao"
+                 name="data_publicacao" required />
+        </label>
+
+        <label>Páginas
+          <input type="number" [(ngModel)]="modalLivro.numeroPaginas"
+                 name="numeroPaginas" min="1" />
+        </label>
+
+        <label>Quantidade
+          <input type="number" [(ngModel)]="modalLivro.qtde_livros"
+                 name="qtde_livros" min="1" />
+        </label>
+
+        <label>Disponibilidade
+          <select [(ngModel)]="modalLivro.disponibilidade"
+                  name="disponibilidade">
+            <option [ngValue]="true">Disponível</option>
+            <option [ngValue]="false">Indisponível</option>
+          </select>
+        </label>
+
+        <label>Capa (URL)
+          <input type="text" [(ngModel)]="modalLivro.capa"
+                 name="capa" />
+        </label>
+
+        <label class="stretch">Descrição
+          <textarea rows="8" [(ngModel)]="modalLivro.descricao"
+                    name="descricao"></textarea>
+        </label>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="primary"
+                [disabled]="!createForm.valid"
+                (click)="confirmCreate()">Salvar</button>
+
+        <button type="button" class="ghost" (click)="closeCreate()">Cancelar</button>
+
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showEditModal">
+  <div class="modal">
+    <h2>Editar Livro</h2>
+
+    <form #editForm="ngForm">
+      <div class="modal-grid">
+        <label>Título*
+          <input type="text" [(ngModel)]="modalLivro.titulo"
+                 name="tituloEdit" required />
+        </label>
+
+
+        <label>Autor(es)*
+          <input type="text" [(ngModel)]="modalLivro.autores"
+                 name="autores" required />
+        </label>
+
+        <label>Editora
+          <input type="text" [(ngModel)]="modalLivro.editora"
+                 name="editora" />
+        </label>
+
+        <label>Categoria
+          <input type="text" [(ngModel)]="modalLivro.categoria"
+                 name="categoria" placeholder="ex.: drama, fiction" />
+        </label>
+
+        <label>Data publicação*
+          <input type="date" [(ngModel)]="modalLivro.data_publicacao"
+                 name="data_publicacao" required />
+        </label>
+
+        <label>Páginas
+          <input type="number" [(ngModel)]="modalLivro.numeroPaginas"
+                 name="numeroPaginas" min="1" />
+        </label>
+
+        <label>Quantidade
+          <input type="number" [(ngModel)]="modalLivro.qtde_livros"
+                 name="qtde_livros" min="1" />
+        </label>
+
+        <label>Disponibilidade
+          <select [(ngModel)]="modalLivro.disponibilidade"
+                  name="disponibilidade">
+            <option [ngValue]="true">Disponível</option>
+            <option [ngValue]="false">Indisponível</option>
+          </select>
+        </label>
+
+        <label>Capa (URL)
+          <input type="text" [(ngModel)]="modalLivro.capa"
+                 name="capa" />
+        </label>
+
+        <label class="stretch">Descrição
+          <textarea rows="3" [(ngModel)]="modalLivro.descricao"
+                    name="descricao"></textarea>
+        </label>
+
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="ghost" (click)="closeEdit()">Cancelar</button>
+        <button class="primary" [disabled]="!editForm.valid"
+                (click)="confirmEdit()">Atualizar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal small" style="text-align: center">
+    <h3>Excluir Livro</h3>
+    <p>Tem certeza de que deseja excluir<br><strong>{{ modalLivro.titulo }}</strong>?</p>
+
+    <div class="modal-actions center">
+      <button class="ghost"  (click)="closeDelete()">Cancelar</button>
+      <button class="danger" (click)="confirmDelete()">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showBanirModal">
+  <div class="modal small">
+    <h3>Banir Usuário</h3>
+    <p>Tem certeza que deseja banir o usuário<br>
+      <strong>{{ usuarioParaBanir.name || usuarioParaBanir.email }}</strong>?
+    </p>
+
+    <div class="modal-actions center">
+      <button class="ghost" (click)="closeBanirModal()">Cancelar</button>
+      <button class="danger" (click)="confirmarBanimento()">Banir</button>
     </div>
   </div>
 </div>

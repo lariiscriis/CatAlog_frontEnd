@@ -310,7 +310,7 @@ private buscarEmprestimoDoLivro(): void {
     this.anotacaoService.atualizar(this.selectedNota.idAnotacao!, body).subscribe({
       next: (atualizada) => {
         this.anotacoes = this.anotacoes.map(n =>
-          n.id === atualizada.id ? atualizada : n
+          n.idAnotacao === atualizada.idAnotacao ? atualizada : n
         );
         this.toastr.success('Anotação atualizada!');
         this.showConfirmEdit = false;
